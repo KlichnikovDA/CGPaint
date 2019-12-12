@@ -127,8 +127,6 @@ namespace CG_Paint
             }
             Groups.Add(new Group(CP, "Группа " + (Groups.Count + 1)));
             lbGroups.Items.Add(Groups[Groups.Count -1].Name);
-            lbGroups.SelectedIndices.Add(lbGroups.Items.Count - 1);
-            Groups[Groups.Count - 1].Focused = true;
         }
 
 
@@ -194,11 +192,20 @@ namespace CG_Paint
                 if (i < UsedPrimitives.Count)
                 {                    
                     lbPrimitives.SelectedIndices.Add(i);
+                    lbGroups.SelectedIndices.Clear();
+                    foreach(Group Gp in Groups)
+                    {
+                        Gp.Focused = false;
+                    }
                 }
                 else
                 {
                     lbGroups.SelectedIndices.Clear();
                     lbPrimitives.SelectedIndices.Clear();
+                    foreach (Group Gp in Groups)
+                    {
+                        Gp.Focused = false;
+                    }
                 }
             }
             dragging = false;
@@ -229,7 +236,8 @@ namespace CG_Paint
             {
                 int j = lbPrimitives.SelectedIndices[i];
                 UsedPrimitives[j].Focused = true;
-                CurrentPrimitives.Add(UsedPrimitives[j]);
+                if (!CurrentPrimitives.Contains(UsedPrimitives[j]))
+                    CurrentPrimitives.Add(UsedPrimitives[j]);
             }
             pbDraw.Invalidate();
             if (CurrentPrimitives.Count == 1 && CurrentPrimitives[0].GetType() == typeof(MyLine))
@@ -257,46 +265,20 @@ namespace CG_Paint
         // Выбор группы из списка
         private void lbGroups_SelectedIndexChanged(object sender, EventArgs e)
         {
-            foreach (Primitive Prim in UsedPrimitives)
-                Prim.Focused = false;
-            CurrentPrimitives.Clear();
-            for (int i = 0; i < Groups.Count; i++ )
+            foreach (Group gp in Groups)
+                gp.Focused = false;
+            for (int i = 0; i < lbGroups.SelectedIndices.Count; i++)
             {
-                foreach(Primitive Prim in Groups[i].Primitives)
+                Groups[i].Focused = true;
+                int j = lbGroups.SelectedIndices[i];
+                foreach (Primitive Prim in Groups[i].Primitives)
                 {
-                    int j = UsedPrimitives.IndexOf(Prim);
-                    UsedPrimitives[j].Focused = true;
+                    int k = UsedPrimitives.IndexOf(Prim);
+                    UsedPrimitives[k].Focused = true;
                     if (!CurrentPrimitives.Contains(Prim))
                         CurrentPrimitives.Add(Prim);
+                    lbPrimitives.SelectedIndices.Add(lbPrimitives.Items.IndexOf(Prim.Name));
                 }
-            }
-            for (int i = 0; i < lbPrimitives.SelectedIndices.Count; i++)
-            {
-                int j = lbPrimitives.SelectedIndices[i];
-                UsedPrimitives[j].Focused = true;
-                if (!CurrentPrimitives.Contains(UsedPrimitives[j]))
-                    CurrentPrimitives.Add(UsedPrimitives[j]);
-            }
-            pbDraw.Invalidate();
-            if (CurrentPrimitives.Count == 1 && CurrentPrimitives[0].GetType() == typeof(MyLine))
-            {
-                tbXCoord.Text = (CurrentPrimitives[0] as MyLine).GetEnd(0);
-                tbXCoord.Enabled = true;
-                btApplyOne.Enabled = true;
-                tbYCoord.Text = (CurrentPrimitives[0] as MyLine).GetEnd(1);
-                tbYCoord.Enabled = true;
-                btApplyTwo.Enabled = true;
-                tbEquation.Text = (CurrentPrimitives[0] as MyLine).Equation();
-            }
-            else
-            {
-                tbXCoord.Text = "";
-                tbXCoord.Enabled = false;
-                btApplyOne.Enabled = false;
-                tbYCoord.Text = "";
-                tbYCoord.Enabled = false;
-                btApplyTwo.Enabled = false;
-                tbEquation.Text = "";
             }
         }
 
