@@ -8,3 +8,13 @@ H:\Вышка\CG_Paint\CG_Paint\obj\Debug\CG_Paint.csproj.GenerateResource.cache
 H:\Вышка\CG_Paint\CG_Paint\obj\Debug\CG_Paint.csproj.CoreCompileInputs.cache
 H:\Вышка\CG_Paint\CG_Paint\obj\Debug\CG_Paint.exe
 H:\Вышка\CG_Paint\CG_Paint\obj\Debug\CG_Paint.pdb
+C:\Users\Денис\Downloads\CGPaint\CG_Paint\bin\Debug\CG_Paint.exe.config
+C:\Users\Денис\Downloads\CGPaint\CG_Paint\bin\Debug\CG_Paint.exe
+C:\Users\Денис\Downloads\CGPaint\CG_Paint\bin\Debug\CG_Paint.pdb
+C:\Users\Денис\Downloads\CGPaint\CG_Paint\obj\Debug\CG_Paint.csprojAssemblyReference.cache
+C:\Users\Денис\Downloads\CGPaint\CG_Paint\obj\Debug\CG_Paint.MainForm.resources
+C:\Users\Денис\Downloads\CGPaint\CG_Paint\obj\Debug\CG_Paint.Properties.Resources.resources
+C:\Users\Денис\Downloads\CGPaint\CG_Paint\obj\Debug\CG_Paint.csproj.GenerateResource.cache
+C:\Users\Денис\Downloads\CGPaint\CG_Paint\obj\Debug\CG_Paint.csproj.CoreCompileInputs.cache
+C:\Users\Денис\Downloads\CGPaint\CG_Paint\obj\Debug\CG_Paint.exe
+C:\Users\Денис\Downloads\CGPaint\CG_Paint\obj\Debug\CG_Paint.pdb

@@ -24,17 +24,22 @@ namespace CG_Paint
         // Список использованных примитивов
         List<Primitive> UsedPrimitives = new List<Primitive>();
         // Ссылка на примитив, над которым в данный момент производятся операции
-        Primitive CurrentPrimitive;
+        List<Primitive> CurrentPrimitives = new List<Primitive>();
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            MenuItemNew_Click(sender, e);
+        }
 
         #region Операции с файлами
         // Создание нового файла
         private void MenuItemNew_Click(object sender, EventArgs e)
         {
+            FilePath = null;
             lbPrimitives.Items.Clear();
             UsedPrimitives.Clear();
-            CurrentPrimitive = null;
+            CurrentPrimitives.Clear();
             pbDraw.Invalidate();
-            FilePath = null;
         }
 
         // Открытие файла
@@ -114,7 +119,8 @@ namespace CG_Paint
         // Обработка "зажатия" клавиши мыши
         private void pbDraw_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left && CurrentPrimitive != null && CurrentPrimitive.Contains(e.Location))
+            if (e.Button == MouseButtons.Left && CurrentPrimitives.Count > 0 
+                && CurrentPrimitives.Any(x => x.Contains(e.Location)))
             {
                 dragging = true;
                 StartPoint = new Point(e.Location.X, e.Location.Y);
@@ -124,23 +130,38 @@ namespace CG_Paint
         // Обработка движения мыши
         private void pbDraw_MouseMove(object sender, MouseEventArgs e)
         {
-            tbXCoord.Text = e.X.ToString();
-            tbYCoord.Text = e.Y.ToString();
+            lblMouse.Text = e.X.ToString() + ";" + (600 - e.Y).ToString();
             if (dragging && StartPoint != null)
             {
-                int n, m;
+                int n, m, k;
                 m = e.X - StartPoint.X;
                 n = e.Y - StartPoint.Y;
+                k = 0;
                 // Если мы кликаем возле одного из узлов фигуры, то двигаем этот узел
-                int p = CurrentPrimitive.ContainsResizer(StartPoint);
+                int p = -1;
+                int i = 0;
+                do
+                {
+                    p = CurrentPrimitives[i].ContainsResizer(StartPoint);
+                }
+                while (p == -1 && ++i < CurrentPrimitives.Count);
                 if (p != -1)
-                    CurrentPrimitive.Matrix = Transfer(CurrentPrimitive.Matrix, m, n, p);
+                    CurrentPrimitives[i].Matrix = Transfer(CurrentPrimitives[i].Matrix, m, n, k, p);
                 // Иначе двигаем всю фигуру целиком
                 else
-                    CurrentPrimitive.Matrix = Transfer(CurrentPrimitive.Matrix, m, n);
+                    for (i = 0; i < CurrentPrimitives.Count; i++)
+                        CurrentPrimitives[i].Matrix = Transfer(CurrentPrimitives[i].Matrix, m, n, k);
                 pbDraw.Invalidate();
                 StartPoint.X = e.X;
                 StartPoint.Y = e.Y;
+                if (CurrentPrimitives.Count == 1 && CurrentPrimitives[0].GetType() == typeof(MyLine))
+                {
+                    tbXCoord.Text = (CurrentPrimitives[0] as MyLine).GetEnd(0);
+                    tbXCoord.Enabled = true;
+                    tbYCoord.Text = (CurrentPrimitives[0] as MyLine).GetEnd(1);
+                    tbYCoord.Enabled = true;
+                    tbEquation.Text = (CurrentPrimitives[0] as MyLine).Equation();
+                }
             }
         }
 
@@ -155,29 +176,23 @@ namespace CG_Paint
                     i++;
                 }
                 if (i < UsedPrimitives.Count)
-                {
-                    if (CurrentPrimitive != null)
-                        CurrentPrimitive.Focused = false;
-                    UsedPrimitives[i].Focused = true;
-                    CurrentPrimitive = UsedPrimitives[i];
-                    lbPrimitives.SelectedIndex = i;
-                    pbDraw.Invalidate();
+                {                    
+                    lbPrimitives.SelectedIndices.Add(i);
                 }
                 else
                 {
-                    if (CurrentPrimitive != null)
-                        CurrentPrimitive.Focused = false;
-                    CurrentPrimitive = null;
-                    lbPrimitives.SelectedIndex = -1;
-                    pbDraw.Invalidate();
+                    lbPrimitives.SelectedIndices.Clear();
                 }
             }
             dragging = false;
+            pbDraw.Invalidate();
         }
 
         // Отрисовка примитивов
         private void pbDraw_Paint(object sender, PaintEventArgs e)
         {
+            if (cbShowAxis.Checked)
+                Axis.DrawAxis(e.Graphics);
             if (UsedPrimitives.Count > 0)
             {
                 foreach (var Prim in UsedPrimitives)
@@ -190,27 +205,50 @@ namespace CG_Paint
         // Выбор примитивов из списка
         private void lbPrimitives_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (CurrentPrimitive != null)
-                CurrentPrimitive.Focused = false;
-            if (lbPrimitives.SelectedIndex != -1)
+            foreach (Primitive Prim in CurrentPrimitives)
+                Prim.Focused = false;
+            CurrentPrimitives.Clear();
+            for (int i = 0; i < lbPrimitives.SelectedIndices.Count; i++)
             {
-                UsedPrimitives[lbPrimitives.SelectedIndex].Focused = true;
-                CurrentPrimitive = UsedPrimitives[lbPrimitives.SelectedIndex];
+                int j = lbPrimitives.SelectedIndices[i];
+                UsedPrimitives[j].Focused = true;
+                CurrentPrimitives.Add(UsedPrimitives[j]);
             }
             pbDraw.Invalidate();
+            if (CurrentPrimitives.Count == 1 && CurrentPrimitives[0].GetType() == typeof(MyLine))
+            {
+                tbXCoord.Text = (CurrentPrimitives[0] as MyLine).GetEnd(0);
+                tbXCoord.Enabled = true;
+                tbYCoord.Text = (CurrentPrimitives[0] as MyLine).GetEnd(1);
+                tbYCoord.Enabled = true;
+                tbEquation.Text = (CurrentPrimitives[0] as MyLine).Equation();
+            }
+            else
+            {
+                tbXCoord.Text = "";
+                tbXCoord.Enabled = false;
+                tbYCoord.Text = "";
+                tbYCoord.Enabled = false;
+                tbEquation.Text = "";
+            }
         }
 
         // Удаление выделенного элемента
         private void MenuItemDelete_Click(object sender, EventArgs e)
         {
-            if (CurrentPrimitive != null)
+            if (CurrentPrimitives.Count > 0)
             {
-                CurrentPrimitive = null;
+                CurrentPrimitives.Clear();
                 UsedPrimitives.RemoveAt(lbPrimitives.SelectedIndex);
                 lbPrimitives.Items.RemoveAt(lbPrimitives.SelectedIndex);
                 pbDraw.Invalidate();
             }
         }
         #endregion Операции с примитивами
+
+        private void cbShowAxis_CheckedChanged(object sender, EventArgs e)
+        {
+            pbDraw.Invalidate();
+        }
     }
 }

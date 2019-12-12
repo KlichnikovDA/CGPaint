@@ -46,6 +46,12 @@
             this.tbYCoord = new System.Windows.Forms.TextBox();
             this.labely = new System.Windows.Forms.Label();
             this.lbPrimitives = new System.Windows.Forms.ListBox();
+            this.tbEquation = new System.Windows.Forms.TextBox();
+            this.lblEquation = new System.Windows.Forms.Label();
+            this.lblMouse = new System.Windows.Forms.Label();
+            this.cbShowAxis = new System.Windows.Forms.CheckBox();
+            this.btApplyOne = new System.Windows.Forms.Button();
+            this.btApplyTwo = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbDraw)).BeginInit();
             this.SuspendLayout();
@@ -78,7 +84,7 @@
             this.MenuItemNew.Name = "MenuItemNew";
             this.MenuItemNew.ShortcutKeyDisplayString = "Ctrl+N";
             this.MenuItemNew.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.MenuItemNew.Size = new System.Drawing.Size(180, 22);
+            this.MenuItemNew.Size = new System.Drawing.Size(225, 22);
             this.MenuItemNew.Text = "Новый";
             this.MenuItemNew.Click += new System.EventHandler(this.MenuItemNew_Click);
             // 
@@ -86,7 +92,7 @@
             // 
             this.MenuItemOpen.Name = "MenuItemOpen";
             this.MenuItemOpen.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.MenuItemOpen.Size = new System.Drawing.Size(180, 22);
+            this.MenuItemOpen.Size = new System.Drawing.Size(225, 22);
             this.MenuItemOpen.Text = "Открыть";
             this.MenuItemOpen.Click += new System.EventHandler(this.MenuItemOpen_Click);
             // 
@@ -110,7 +116,7 @@
             // MenuItemExport
             // 
             this.MenuItemExport.Name = "MenuItemExport";
-            this.MenuItemExport.Size = new System.Drawing.Size(180, 22);
+            this.MenuItemExport.Size = new System.Drawing.Size(225, 22);
             this.MenuItemExport.Text = "Экспорт в JPG";
             this.MenuItemExport.Click += new System.EventHandler(this.MenuItemExport_Click);
             // 
@@ -128,14 +134,14 @@
             this.MenuItemCreate.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.MenuItemLine});
             this.MenuItemCreate.Name = "MenuItemCreate";
-            this.MenuItemCreate.Size = new System.Drawing.Size(180, 22);
+            this.MenuItemCreate.Size = new System.Drawing.Size(142, 22);
             this.MenuItemCreate.Text = "Создать";
             // 
             // MenuItemLine
             // 
             this.MenuItemLine.Name = "MenuItemLine";
             this.MenuItemLine.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.L)));
-            this.MenuItemLine.Size = new System.Drawing.Size(180, 22);
+            this.MenuItemLine.Size = new System.Drawing.Size(153, 22);
             this.MenuItemLine.Text = "Прямая";
             this.MenuItemLine.Click += new System.EventHandler(this.MenuItemLine_Click);
             // 
@@ -143,7 +149,7 @@
             // 
             this.MenuItemDelete.Name = "MenuItemDelete";
             this.MenuItemDelete.ShortcutKeys = System.Windows.Forms.Keys.Delete;
-            this.MenuItemDelete.Size = new System.Drawing.Size(180, 22);
+            this.MenuItemDelete.Size = new System.Drawing.Size(142, 22);
             this.MenuItemDelete.Text = "Удалить";
             this.MenuItemDelete.Click += new System.EventHandler(this.MenuItemDelete_Click);
             // 
@@ -152,7 +158,7 @@
             this.pbDraw.BackColor = System.Drawing.Color.White;
             this.pbDraw.Location = new System.Drawing.Point(12, 27);
             this.pbDraw.Name = "pbDraw";
-            this.pbDraw.Size = new System.Drawing.Size(1000, 600);
+            this.pbDraw.Size = new System.Drawing.Size(800, 600);
             this.pbDraw.TabIndex = 1;
             this.pbDraw.TabStop = false;
             this.pbDraw.Paint += new System.Windows.Forms.PaintEventHandler(this.pbDraw_Paint);
@@ -163,7 +169,7 @@
             // labelPrimitives
             // 
             this.labelPrimitives.AutoSize = true;
-            this.labelPrimitives.Location = new System.Drawing.Point(1018, 207);
+            this.labelPrimitives.Location = new System.Drawing.Point(1099, 260);
             this.labelPrimitives.Name = "labelPrimitives";
             this.labelPrimitives.Size = new System.Drawing.Size(108, 13);
             this.labelPrimitives.TabIndex = 3;
@@ -172,16 +178,16 @@
             // labelx
             // 
             this.labelx.AutoSize = true;
-            this.labelx.Location = new System.Drawing.Point(1018, 34);
+            this.labelx.Location = new System.Drawing.Point(917, 37);
             this.labelx.Name = "labelx";
-            this.labelx.Size = new System.Drawing.Size(77, 13);
+            this.labelx.Size = new System.Drawing.Size(146, 13);
             this.labelx.TabIndex = 4;
-            this.labelx.Text = "Координата X";
+            this.labelx.Text = "Координаты первого конца";
             // 
             // tbXCoord
             // 
             this.tbXCoord.Enabled = false;
-            this.tbXCoord.Location = new System.Drawing.Point(1101, 31);
+            this.tbXCoord.Location = new System.Drawing.Point(1069, 34);
             this.tbXCoord.Name = "tbXCoord";
             this.tbXCoord.Size = new System.Drawing.Size(100, 20);
             this.tbXCoord.TabIndex = 5;
@@ -189,7 +195,7 @@
             // tbYCoord
             // 
             this.tbYCoord.Enabled = false;
-            this.tbYCoord.Location = new System.Drawing.Point(1101, 57);
+            this.tbYCoord.Location = new System.Drawing.Point(1069, 60);
             this.tbYCoord.Name = "tbYCoord";
             this.tbYCoord.Size = new System.Drawing.Size(100, 20);
             this.tbYCoord.TabIndex = 7;
@@ -197,26 +203,90 @@
             // labely
             // 
             this.labely.AutoSize = true;
-            this.labely.Location = new System.Drawing.Point(1018, 60);
+            this.labely.Location = new System.Drawing.Point(918, 57);
             this.labely.Name = "labely";
-            this.labely.Size = new System.Drawing.Size(77, 13);
+            this.labely.Size = new System.Drawing.Size(145, 13);
             this.labely.TabIndex = 6;
-            this.labely.Text = "Координата Y";
+            this.labely.Text = "Координаты второго конца";
             // 
             // lbPrimitives
             // 
             this.lbPrimitives.FormattingEnabled = true;
-            this.lbPrimitives.Location = new System.Drawing.Point(1018, 223);
+            this.lbPrimitives.Location = new System.Drawing.Point(1102, 276);
             this.lbPrimitives.Name = "lbPrimitives";
-            this.lbPrimitives.Size = new System.Drawing.Size(234, 407);
+            this.lbPrimitives.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
+            this.lbPrimitives.Size = new System.Drawing.Size(150, 394);
             this.lbPrimitives.TabIndex = 8;
             this.lbPrimitives.SelectedIndexChanged += new System.EventHandler(this.lbPrimitives_SelectedIndexChanged);
+            // 
+            // tbEquation
+            // 
+            this.tbEquation.Enabled = false;
+            this.tbEquation.Location = new System.Drawing.Point(1069, 83);
+            this.tbEquation.Name = "tbEquation";
+            this.tbEquation.Size = new System.Drawing.Size(183, 20);
+            this.tbEquation.TabIndex = 10;
+            // 
+            // lblEquation
+            // 
+            this.lblEquation.AutoSize = true;
+            this.lblEquation.Location = new System.Drawing.Point(1000, 83);
+            this.lblEquation.Name = "lblEquation";
+            this.lblEquation.Size = new System.Drawing.Size(63, 13);
+            this.lblEquation.TabIndex = 9;
+            this.lblEquation.Text = "Уравнение";
+            // 
+            // lblMouse
+            // 
+            this.lblMouse.AutoSize = true;
+            this.lblMouse.Location = new System.Drawing.Point(9, 660);
+            this.lblMouse.Name = "lblMouse";
+            this.lblMouse.Size = new System.Drawing.Size(35, 13);
+            this.lblMouse.TabIndex = 11;
+            this.lblMouse.Text = "label1";
+            // 
+            // cbShowAxis
+            // 
+            this.cbShowAxis.AutoSize = true;
+            this.cbShowAxis.Checked = true;
+            this.cbShowAxis.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbShowAxis.Location = new System.Drawing.Point(68, 659);
+            this.cbShowAxis.Name = "cbShowAxis";
+            this.cbShowAxis.Size = new System.Drawing.Size(185, 17);
+            this.cbShowAxis.TabIndex = 12;
+            this.cbShowAxis.Text = "Отображать координатные оси";
+            this.cbShowAxis.UseVisualStyleBackColor = true;
+            this.cbShowAxis.CheckedChanged += new System.EventHandler(this.cbShowAxis_CheckedChanged);
+            // 
+            // btApplyOne
+            // 
+            this.btApplyOne.Location = new System.Drawing.Point(1177, 34);
+            this.btApplyOne.Name = "btApplyOne";
+            this.btApplyOne.Size = new System.Drawing.Size(75, 22);
+            this.btApplyOne.TabIndex = 13;
+            this.btApplyOne.Text = "Задать";
+            this.btApplyOne.UseVisualStyleBackColor = true;
+            // 
+            // btApplyTwo
+            // 
+            this.btApplyTwo.Location = new System.Drawing.Point(1177, 58);
+            this.btApplyTwo.Name = "btApplyTwo";
+            this.btApplyTwo.Size = new System.Drawing.Size(75, 22);
+            this.btApplyTwo.TabIndex = 14;
+            this.btApplyTwo.Text = "Задать";
+            this.btApplyTwo.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1264, 682);
+            this.Controls.Add(this.btApplyTwo);
+            this.Controls.Add(this.btApplyOne);
+            this.Controls.Add(this.cbShowAxis);
+            this.Controls.Add(this.lblMouse);
+            this.Controls.Add(this.tbEquation);
+            this.Controls.Add(this.lblEquation);
             this.Controls.Add(this.lbPrimitives);
             this.Controls.Add(this.tbYCoord);
             this.Controls.Add(this.labely);
@@ -228,6 +298,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.Text = "Графический редактор";
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbDraw)).EndInit();
@@ -256,6 +327,12 @@
         private System.Windows.Forms.TextBox tbYCoord;
         private System.Windows.Forms.Label labely;
         private System.Windows.Forms.ListBox lbPrimitives;
+        private System.Windows.Forms.TextBox tbEquation;
+        private System.Windows.Forms.Label lblEquation;
+        private System.Windows.Forms.Label lblMouse;
+        private System.Windows.Forms.CheckBox cbShowAxis;
+        private System.Windows.Forms.Button btApplyOne;
+        private System.Windows.Forms.Button btApplyTwo;
     }
 }
 

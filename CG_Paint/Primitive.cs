@@ -31,7 +31,7 @@ namespace CG_Paint
         {
             public MyLine(Point p1, Point p2, string n)
             {
-                Matrix = new int[,] { { p1.X, p1.Y, 1 }, { p2.X, p2.Y, 1 } };
+                Matrix = new int[,] { { p1.X, p1.Y, 0, 1 }, { p2.X, p2.Y, 0, 1 } };
                 Name = n;
                 Focused = false;
             }
@@ -51,7 +51,7 @@ namespace CG_Paint
             override public bool Contains(Point p)
             {
                 float temp = Slope() * p.X + (Matrix[0, 1] - Slope() * Matrix[0, 0]);
-                return (temp >= (p.Y - 3) && temp <= (p.Y + 3)) || (Focused && ContainsResizer(p) != -1);
+                return (temp >= (p.Y - 5) && temp <= (p.Y + 5)) || (Focused && ContainsResizer(p) != -1);
             }
 
             override public int ContainsResizer(Point p)
@@ -77,6 +77,21 @@ namespace CG_Paint
                 g.DrawLine(new Pen(Color.Blue, 3), Matrix[0, 0], Matrix[0, 1], Matrix[1, 0], Matrix[1, 1]);
                 g.DrawEllipse(new Pen(Color.Blue, 3), Matrix[0, 0] - 5, Matrix[0, 1] - 5, 10, 10);
                 g.DrawEllipse(new Pen(Color.Blue, 3), Matrix[1, 0] - 5, Matrix[1, 1] - 5, 10, 10);
+            }
+
+            public string GetEnd(int row)
+            {
+                return Matrix[row, 0].ToString() + ";" + Matrix[row, 1].ToString() + ";" + Matrix[row, 2].ToString();
+            }
+
+            public string Equation()
+            {
+                int A, B, C;
+                A = Matrix[0, 1] - Matrix[1, 1];
+                B = Matrix[1, 0] - Matrix[0, 0];
+                C = Matrix[0, 0] * Matrix[1, 1] - Matrix[0, 1] * Matrix[1, 0];
+                return A + "x + " + B + "y + " + C + " = 0";
+                    
             }
         }
     }

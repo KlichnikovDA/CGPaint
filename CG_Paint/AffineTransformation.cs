@@ -9,17 +9,17 @@ namespace CG_Paint
     public static class AffineTransformation
     {
         // Смещение фигуры целиком
-        public static int[,] Transfer(int[,] InitialMatrix, int M, int N)
+        public static int[,] Transfer(int[,] InitialMatrix, int M, int N, int K)
         {
-            int[,] T = new int[,] { { 1, 0, 0 }, { 0, 1, 0 }, { M, N, 1 } };
+            int[,] T = new int[,] { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0 }, { M, N, K, 1 } };
             return MatrixMultiply(InitialMatrix, T);
         }
 
         // Смещение одной точки фигуры
-        public static int[,] Transfer(int[,] InitialMatrix, int M, int N, int P)
+        public static int[,] Transfer(int[,] InitialMatrix, int M, int N, int K, int P)
         {
             // Задание матрицы операций
-            int[,] T = new int[,] { { 1, 0, 0 }, { 0, 1, 0 }, { M, N, 1 } };
+            int[,] T = new int[,] { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0 }, { M, N, K, 1 } };
             // Вектор, описывающий точку
             int[] Pt = new int[InitialMatrix.GetLength(1)];
             for (int i = 0; i < InitialMatrix.GetLength(1); i++)
