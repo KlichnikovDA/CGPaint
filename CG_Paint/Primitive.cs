@@ -81,7 +81,20 @@ namespace CG_Paint
 
             public string GetEnd(int row)
             {
-                return Matrix[row, 0].ToString() + ";" + Matrix[row, 1].ToString() + ";" + Matrix[row, 2].ToString();
+                return Matrix[row, 0].ToString() + ";" + (600 - Matrix[row, 1]).ToString() + ";" + Matrix[row, 2].ToString();
+            }
+
+            public void ChangeEnd(int row, string CoordString)
+            {
+                string[] NewCoord = CoordString.Split(';');
+                int NewX, NewY, NewZ;
+                NewX = Int32.Parse(NewCoord[0]);
+                NewY = 600 - Int32.Parse(NewCoord[1]);
+                NewZ = Int32.Parse(NewCoord[2]);
+
+                Matrix[row, 0] = NewX;
+                Matrix[row, 1] = NewY;
+                Matrix[row, 2] = NewZ;
             }
 
             public string Equation()

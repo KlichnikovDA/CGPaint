@@ -23,7 +23,9 @@ namespace CG_Paint
         string FilePath;
         // Список использованных примитивов
         List<Primitive> UsedPrimitives = new List<Primitive>();
-        // Ссылка на примитив, над которым в данный момент производятся операции
+        // Список использованных примитивов
+        List<Group> Groups = new List<Group>();
+        // Список примитивов, над которым в данный момент производятся операции
         List<Primitive> CurrentPrimitives = new List<Primitive>();
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -38,6 +40,7 @@ namespace CG_Paint
             FilePath = null;
             lbPrimitives.Items.Clear();
             UsedPrimitives.Clear();
+            Groups.Clear();
             CurrentPrimitives.Clear();
             pbDraw.Invalidate();
         }
@@ -108,9 +111,24 @@ namespace CG_Paint
             y1 = rng.Next(0, pbDraw.Height);
             y2 = rng.Next(0, pbDraw.Height);
 
-            UsedPrimitives.Add(new MyLine(new Point(x1, y1), new Point(x2, y2), "Объект "+ UsedPrimitives.Count+1));
-            lbPrimitives.Items.Add("Объект " + UsedPrimitives.Count);
+            UsedPrimitives.Add(new MyLine(new Point(x1, y1), new Point(x2, y2), "Объект "+ (UsedPrimitives.Count+1)));
+            lbPrimitives.Items.Add(UsedPrimitives[UsedPrimitives.Count-1].Name);
             pbDraw.Invalidate();
+        }
+
+        // Сгруппировать примитивы
+        // Группировка - по сути "сохранение" некоего набора выделенных инструментов.
+        private void MenuItemGroup_Click(object sender, EventArgs e)
+        {
+            List<Primitive> CP = new List<Primitive>(CurrentPrimitives.Count);
+            for(int i = 0; i < CurrentPrimitives.Count; i++)
+            {
+                CP.Add(CurrentPrimitives[i]);
+            }
+            Groups.Add(new Group(CP, "Группа " + (Groups.Count + 1)));
+            lbGroups.Items.Add(Groups[Groups.Count -1].Name);
+            lbGroups.SelectedIndices.Add(lbGroups.Items.Count - 1);
+            Groups[Groups.Count - 1].Focused = true;
         }
 
 
@@ -157,9 +175,7 @@ namespace CG_Paint
                 if (CurrentPrimitives.Count == 1 && CurrentPrimitives[0].GetType() == typeof(MyLine))
                 {
                     tbXCoord.Text = (CurrentPrimitives[0] as MyLine).GetEnd(0);
-                    tbXCoord.Enabled = true;
                     tbYCoord.Text = (CurrentPrimitives[0] as MyLine).GetEnd(1);
-                    tbYCoord.Enabled = true;
                     tbEquation.Text = (CurrentPrimitives[0] as MyLine).Equation();
                 }
             }
@@ -181,6 +197,7 @@ namespace CG_Paint
                 }
                 else
                 {
+                    lbGroups.SelectedIndices.Clear();
                     lbPrimitives.SelectedIndices.Clear();
                 }
             }
@@ -219,16 +236,66 @@ namespace CG_Paint
             {
                 tbXCoord.Text = (CurrentPrimitives[0] as MyLine).GetEnd(0);
                 tbXCoord.Enabled = true;
+                btApplyOne.Enabled = true;
                 tbYCoord.Text = (CurrentPrimitives[0] as MyLine).GetEnd(1);
                 tbYCoord.Enabled = true;
+                btApplyTwo.Enabled = true;
                 tbEquation.Text = (CurrentPrimitives[0] as MyLine).Equation();
             }
             else
             {
                 tbXCoord.Text = "";
                 tbXCoord.Enabled = false;
+                btApplyOne.Enabled = false;
                 tbYCoord.Text = "";
                 tbYCoord.Enabled = false;
+                btApplyTwo.Enabled = false;
+                tbEquation.Text = "";
+            }
+        }
+
+        // Выбор группы из списка
+        private void lbGroups_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            foreach (Primitive Prim in UsedPrimitives)
+                Prim.Focused = false;
+            CurrentPrimitives.Clear();
+            for (int i = 0; i < Groups.Count; i++ )
+            {
+                foreach(Primitive Prim in Groups[i].Primitives)
+                {
+                    int j = UsedPrimitives.IndexOf(Prim);
+                    UsedPrimitives[j].Focused = true;
+                    if (!CurrentPrimitives.Contains(Prim))
+                        CurrentPrimitives.Add(Prim);
+                }
+            }
+            for (int i = 0; i < lbPrimitives.SelectedIndices.Count; i++)
+            {
+                int j = lbPrimitives.SelectedIndices[i];
+                UsedPrimitives[j].Focused = true;
+                if (!CurrentPrimitives.Contains(UsedPrimitives[j]))
+                    CurrentPrimitives.Add(UsedPrimitives[j]);
+            }
+            pbDraw.Invalidate();
+            if (CurrentPrimitives.Count == 1 && CurrentPrimitives[0].GetType() == typeof(MyLine))
+            {
+                tbXCoord.Text = (CurrentPrimitives[0] as MyLine).GetEnd(0);
+                tbXCoord.Enabled = true;
+                btApplyOne.Enabled = true;
+                tbYCoord.Text = (CurrentPrimitives[0] as MyLine).GetEnd(1);
+                tbYCoord.Enabled = true;
+                btApplyTwo.Enabled = true;
+                tbEquation.Text = (CurrentPrimitives[0] as MyLine).Equation();
+            }
+            else
+            {
+                tbXCoord.Text = "";
+                tbXCoord.Enabled = false;
+                btApplyOne.Enabled = false;
+                tbYCoord.Text = "";
+                tbYCoord.Enabled = false;
+                btApplyTwo.Enabled = false;
                 tbEquation.Text = "";
             }
         }
@@ -236,12 +303,42 @@ namespace CG_Paint
         // Удаление выделенного элемента
         private void MenuItemDelete_Click(object sender, EventArgs e)
         {
+            // Если есть, что удалять
             if (CurrentPrimitives.Count > 0)
             {
+                // Удаляем нужные элементы из общего списка использованных элементов
+                while (CurrentPrimitives.Count > 0)
+                {
+                    UsedPrimitives.Remove(CurrentPrimitives[0]);
+                    // Удаляем его из всех групп
+                    for(int i = 0; i < Groups.Count; i++)
+                    {
+                        Groups[i].Primitives.Remove(CurrentPrimitives[0]);
+                        // Если это был последний элемент в группе - удаляем группу
+                        if (Groups[i].Primitives.Count == 0)
+                        {
+                            Groups.RemoveAt(i);
+                            lbGroups.Items.RemoveAt(i--);
+                        }
+                    }
+                    lbPrimitives.Items.Remove(CurrentPrimitives[0].Name);
+                }
                 CurrentPrimitives.Clear();
-                UsedPrimitives.RemoveAt(lbPrimitives.SelectedIndex);
-                lbPrimitives.Items.RemoveAt(lbPrimitives.SelectedIndex);
+                lbPrimitives.SelectedIndices.Clear();
                 pbDraw.Invalidate();
+            }
+        }
+
+        // Отмена группировки
+        private void MenuItemDegroup_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < Groups.Count; i++)
+            {
+                if (Groups[i].Focused)
+                {
+                    lbGroups.Items.RemoveAt(i);
+                    Groups.RemoveAt(i--);
+                }
             }
         }
         #endregion Операции с примитивами
@@ -249,6 +346,34 @@ namespace CG_Paint
         private void cbShowAxis_CheckedChanged(object sender, EventArgs e)
         {
             pbDraw.Invalidate();
+        }
+
+        private void btApplyOne_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                (CurrentPrimitives[0] as MyLine).ChangeEnd(0, tbXCoord.Text);
+                tbEquation.Text = (CurrentPrimitives[0] as MyLine).Equation();
+                pbDraw.Invalidate();
+            }
+            catch
+            {
+                tbXCoord.Text = (CurrentPrimitives[0] as MyLine).GetEnd(0);
+            }
+        }
+
+        private void btApplyTwo_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                (CurrentPrimitives[0] as MyLine).ChangeEnd(1, tbYCoord.Text);
+                tbEquation.Text = (CurrentPrimitives[0] as MyLine).Equation();
+                pbDraw.Invalidate();
+            }
+            catch
+            {
+                tbYCoord.Text = (CurrentPrimitives[0] as MyLine).GetEnd(1);
+            }
         }
     }
 }

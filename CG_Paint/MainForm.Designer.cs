@@ -39,6 +39,12 @@
             this.MenuItemCreate = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItemLine = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItemDelete = new System.Windows.Forms.ToolStripMenuItem();
+            this.построениеОтрезковToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItemMedian = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItemAltitude = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItemBisection = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItemGroup = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItemDegroup = new System.Windows.Forms.ToolStripMenuItem();
             this.pbDraw = new System.Windows.Forms.PictureBox();
             this.labelPrimitives = new System.Windows.Forms.Label();
             this.labelx = new System.Windows.Forms.Label();
@@ -52,6 +58,8 @@
             this.cbShowAxis = new System.Windows.Forms.CheckBox();
             this.btApplyOne = new System.Windows.Forms.Button();
             this.btApplyTwo = new System.Windows.Forms.Button();
+            this.lbGroups = new System.Windows.Forms.ListBox();
+            this.lblGroups = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbDraw)).BeginInit();
             this.SuspendLayout();
@@ -124,7 +132,10 @@
             // 
             this.mi_MenuImage.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.MenuItemCreate,
-            this.MenuItemDelete});
+            this.MenuItemDelete,
+            this.построениеОтрезковToolStripMenuItem,
+            this.MenuItemGroup,
+            this.MenuItemDegroup});
             this.mi_MenuImage.Name = "mi_MenuImage";
             this.mi_MenuImage.Size = new System.Drawing.Size(95, 20);
             this.mi_MenuImage.Text = "Изображение";
@@ -134,7 +145,7 @@
             this.MenuItemCreate.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.MenuItemLine});
             this.MenuItemCreate.Name = "MenuItemCreate";
-            this.MenuItemCreate.Size = new System.Drawing.Size(142, 22);
+            this.MenuItemCreate.Size = new System.Drawing.Size(202, 22);
             this.MenuItemCreate.Text = "Создать";
             // 
             // MenuItemLine
@@ -149,9 +160,51 @@
             // 
             this.MenuItemDelete.Name = "MenuItemDelete";
             this.MenuItemDelete.ShortcutKeys = System.Windows.Forms.Keys.Delete;
-            this.MenuItemDelete.Size = new System.Drawing.Size(142, 22);
+            this.MenuItemDelete.Size = new System.Drawing.Size(202, 22);
             this.MenuItemDelete.Text = "Удалить";
             this.MenuItemDelete.Click += new System.EventHandler(this.MenuItemDelete_Click);
+            // 
+            // построениеОтрезковToolStripMenuItem
+            // 
+            this.построениеОтрезковToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MenuItemMedian,
+            this.MenuItemAltitude,
+            this.MenuItemBisection});
+            this.построениеОтрезковToolStripMenuItem.Name = "построениеОтрезковToolStripMenuItem";
+            this.построениеОтрезковToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.построениеОтрезковToolStripMenuItem.Text = "Построение отрезков";
+            // 
+            // MenuItemMedian
+            // 
+            this.MenuItemMedian.Name = "MenuItemMedian";
+            this.MenuItemMedian.Size = new System.Drawing.Size(180, 22);
+            this.MenuItemMedian.Text = "Медиана";
+            // 
+            // MenuItemAltitude
+            // 
+            this.MenuItemAltitude.Name = "MenuItemAltitude";
+            this.MenuItemAltitude.Size = new System.Drawing.Size(180, 22);
+            this.MenuItemAltitude.Text = "Высота";
+            // 
+            // MenuItemBisection
+            // 
+            this.MenuItemBisection.Name = "MenuItemBisection";
+            this.MenuItemBisection.Size = new System.Drawing.Size(180, 22);
+            this.MenuItemBisection.Text = "Биссектриса";
+            // 
+            // MenuItemGroup
+            // 
+            this.MenuItemGroup.Name = "MenuItemGroup";
+            this.MenuItemGroup.Size = new System.Drawing.Size(202, 22);
+            this.MenuItemGroup.Text = "Сгруппировать";
+            this.MenuItemGroup.Click += new System.EventHandler(this.MenuItemGroup_Click);
+            // 
+            // MenuItemDegroup
+            // 
+            this.MenuItemDegroup.Name = "MenuItemDegroup";
+            this.MenuItemDegroup.Size = new System.Drawing.Size(202, 22);
+            this.MenuItemDegroup.Text = "Отменить группировку";
+            this.MenuItemDegroup.Click += new System.EventHandler(this.MenuItemDegroup_Click);
             // 
             // pbDraw
             // 
@@ -169,7 +222,7 @@
             // labelPrimitives
             // 
             this.labelPrimitives.AutoSize = true;
-            this.labelPrimitives.Location = new System.Drawing.Point(1099, 260);
+            this.labelPrimitives.Location = new System.Drawing.Point(1099, 313);
             this.labelPrimitives.Name = "labelPrimitives";
             this.labelPrimitives.Size = new System.Drawing.Size(108, 13);
             this.labelPrimitives.TabIndex = 3;
@@ -212,10 +265,10 @@
             // lbPrimitives
             // 
             this.lbPrimitives.FormattingEnabled = true;
-            this.lbPrimitives.Location = new System.Drawing.Point(1102, 276);
+            this.lbPrimitives.Location = new System.Drawing.Point(1102, 329);
             this.lbPrimitives.Name = "lbPrimitives";
             this.lbPrimitives.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
-            this.lbPrimitives.Size = new System.Drawing.Size(150, 394);
+            this.lbPrimitives.Size = new System.Drawing.Size(150, 342);
             this.lbPrimitives.TabIndex = 8;
             this.lbPrimitives.SelectedIndexChanged += new System.EventHandler(this.lbPrimitives_SelectedIndexChanged);
             // 
@@ -223,8 +276,9 @@
             // 
             this.tbEquation.Enabled = false;
             this.tbEquation.Location = new System.Drawing.Point(1069, 83);
+            this.tbEquation.Multiline = true;
             this.tbEquation.Name = "tbEquation";
-            this.tbEquation.Size = new System.Drawing.Size(183, 20);
+            this.tbEquation.Size = new System.Drawing.Size(183, 76);
             this.tbEquation.TabIndex = 10;
             // 
             // lblEquation
@@ -234,7 +288,7 @@
             this.lblEquation.Name = "lblEquation";
             this.lblEquation.Size = new System.Drawing.Size(63, 13);
             this.lblEquation.TabIndex = 9;
-            this.lblEquation.Text = "Уравнение";
+            this.lblEquation.Text = "Уравнения";
             // 
             // lblMouse
             // 
@@ -266,6 +320,7 @@
             this.btApplyOne.TabIndex = 13;
             this.btApplyOne.Text = "Задать";
             this.btApplyOne.UseVisualStyleBackColor = true;
+            this.btApplyOne.Click += new System.EventHandler(this.btApplyOne_Click);
             // 
             // btApplyTwo
             // 
@@ -275,12 +330,34 @@
             this.btApplyTwo.TabIndex = 14;
             this.btApplyTwo.Text = "Задать";
             this.btApplyTwo.UseVisualStyleBackColor = true;
+            this.btApplyTwo.Click += new System.EventHandler(this.btApplyTwo_Click);
+            // 
+            // lbGroups
+            // 
+            this.lbGroups.FormattingEnabled = true;
+            this.lbGroups.Location = new System.Drawing.Point(1102, 178);
+            this.lbGroups.Name = "lbGroups";
+            this.lbGroups.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
+            this.lbGroups.Size = new System.Drawing.Size(150, 134);
+            this.lbGroups.TabIndex = 16;
+            this.lbGroups.SelectedIndexChanged += new System.EventHandler(this.lbGroups_SelectedIndexChanged);
+            // 
+            // lblGroups
+            // 
+            this.lblGroups.AutoSize = true;
+            this.lblGroups.Location = new System.Drawing.Point(1099, 162);
+            this.lblGroups.Name = "lblGroups";
+            this.lblGroups.Size = new System.Drawing.Size(44, 13);
+            this.lblGroups.TabIndex = 15;
+            this.lblGroups.Text = "Группы";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1264, 682);
+            this.Controls.Add(this.lbGroups);
+            this.Controls.Add(this.lblGroups);
             this.Controls.Add(this.btApplyTwo);
             this.Controls.Add(this.btApplyOne);
             this.Controls.Add(this.cbShowAxis);
@@ -333,6 +410,14 @@
         private System.Windows.Forms.CheckBox cbShowAxis;
         private System.Windows.Forms.Button btApplyOne;
         private System.Windows.Forms.Button btApplyTwo;
+        private System.Windows.Forms.ListBox lbGroups;
+        private System.Windows.Forms.Label lblGroups;
+        private System.Windows.Forms.ToolStripMenuItem построениеОтрезковToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem MenuItemMedian;
+        private System.Windows.Forms.ToolStripMenuItem MenuItemAltitude;
+        private System.Windows.Forms.ToolStripMenuItem MenuItemBisection;
+        private System.Windows.Forms.ToolStripMenuItem MenuItemGroup;
+        private System.Windows.Forms.ToolStripMenuItem MenuItemDegroup;
     }
 }
 
