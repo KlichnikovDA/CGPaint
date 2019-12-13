@@ -386,6 +386,43 @@ namespace CG_Paint
             this.pbDraw.MouseUp -= this.pbDraw_MouseUpMedian;
             this.pbDraw.MouseUp += pbDraw_MouseUp;
         }
+        
+        // Переход в режим построения высоты
+        private void MenuItemAltitude_Click(object sender, EventArgs e)
+        {
+            // Переподписываем делегат на наш новый обработчик
+            this.pbDraw.MouseUp -= this.pbDraw_MouseUp;
+            this.pbDraw.MouseUp += new MouseEventHandler(pbDraw_MouseUpAltitude);
+        }
+
+        // Установка точки из которой будут строиться высоты
+        // Построение высот из точки ко всем выделенным объектам
+        private void pbDraw_MouseUpAltitude(object sender, MouseEventArgs e)
+        {
+            foreach (Primitive Prim in CurrentPrimitives)
+            {
+                // Вычисление точки пересечения прямой и высоты
+                int A, B, C;
+                A = Prim.Matrix[1, 0] - Prim.Matrix[0, 0];
+                B = Prim.Matrix[1, 1] - Prim.Matrix[0, 1];
+                C = Prim.Matrix[1, 2] - Prim.Matrix[0, 2];
+                double L = (-A * (Prim.Matrix[0, 0] - e.X) - B * (Prim.Matrix[0, 1] - e.Y) - C * Prim.Matrix[0, 2]) /
+                    (1.0 * (A * A + B * B + C * C));
+                int x3, y3, z3;
+                x3 = (int)(Prim.Matrix[0, 0] + A * L);
+                y3 = (int)(Prim.Matrix[0, 1] + B * L);
+                z3 = (int)(Prim.Matrix[0, 2] + C * L);
+
+                UsedPrimitives.Add(new MyLine(new Point(e.X, e.Y), new Point(x3, y3), z3, 
+                    "Объект " + (UsedPrimitives.Count + 1)));
+                lbPrimitives.Items.Add(UsedPrimitives[UsedPrimitives.Count - 1].Name);
+                pbDraw.Invalidate();
+            }
+
+            // Возврат к стандартному обработчику клика мышью
+            this.pbDraw.MouseUp -= this.pbDraw_MouseUpAltitude;
+            this.pbDraw.MouseUp += pbDraw_MouseUp;
+        }
         #endregion Сложные операции
     }
 }
