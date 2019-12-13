@@ -100,10 +100,12 @@ namespace CG_Paint
             public string Equation()
             {
                 int A, B, C;
-                A = Matrix[0, 1] - Matrix[1, 1];
-                B = Matrix[1, 0] - Matrix[0, 0];
-                C = Matrix[0, 0] * Matrix[1, 1] - Matrix[0, 1] * Matrix[1, 0];
-                return A + "x + " + B + "y + " + C + " = 0";
+                A = Matrix[1, 0] - Matrix[0, 0];
+                B = Matrix[1, 1] - Matrix[0, 1];
+                C = Matrix[1, 2] - Matrix[0, 2];
+                return "x = " + Matrix[0, 0] + " + " + A + " * t" + Environment.NewLine + 
+                    "y = " + Matrix[0, 1] + " + " + B + " * t" + Environment.NewLine + 
+                    "z = " + Matrix[0, 2] + " + " + C + " * t";
                     
             }
         }

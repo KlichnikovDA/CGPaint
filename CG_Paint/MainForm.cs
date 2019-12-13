@@ -266,12 +266,21 @@ namespace CG_Paint
         private void lbGroups_SelectedIndexChanged(object sender, EventArgs e)
         {
             foreach (Group gp in Groups)
+            {
                 gp.Focused = false;
+                foreach (Primitive Prim in gp.Primitives)
+                {
+                    int k = UsedPrimitives.IndexOf(Prim);
+                    UsedPrimitives[k].Focused = false;
+                    CurrentPrimitives.Remove(Prim);
+                    lbPrimitives.SelectedIndices.Remove(lbPrimitives.Items.IndexOf(Prim.Name));
+                }
+            }
             for (int i = 0; i < lbGroups.SelectedIndices.Count; i++)
             {
-                Groups[i].Focused = true;
                 int j = lbGroups.SelectedIndices[i];
-                foreach (Primitive Prim in Groups[i].Primitives)
+                Groups[j].Focused = true;
+                foreach (Primitive Prim in Groups[j].Primitives)
                 {
                     int k = UsedPrimitives.IndexOf(Prim);
                     UsedPrimitives[k].Focused = true;
