@@ -29,9 +29,24 @@ namespace CG_Paint
         [Serializable]
         public class MyLine: Primitive
         {
-            public MyLine(Point p1, Point p2, string n)
+            public MyLine(Point p1, Point p2, int z2, string n)
             {
-                Matrix = new int[,] { { p1.X, p1.Y, 0, 1 }, { p2.X, p2.Y, 0, 1 } };
+                Matrix = new int[,] { { p1.X, p1.Y, 0, 1 }, { p2.X, p2.Y, z2, 1 } };
+                Name = n;
+                Focused = false;
+            }
+
+            public MyLine(int x, int y, string n)
+            {
+                Random rng = new Random();
+                int x1, x2, y1, y2;
+                // Задание координат
+                x1 = rng.Next(0, x);
+                x2 = rng.Next(0, x);
+                y1 = rng.Next(0, y);
+                y2 = rng.Next(0, y);
+
+                Matrix = new int[,] { { x1, y1, 0, 1 }, { x2, y2, 0, 1 } };
                 Name = n;
                 Focused = false;
             }
@@ -83,6 +98,18 @@ namespace CG_Paint
             {
                 return Matrix[row, 0].ToString() + ";" + (600 - Matrix[row, 1]).ToString() + ";" + Matrix[row, 2].ToString();
             }
+                
+            // Вычислить координаты середины отрезка
+            public int[] GetMiddle()
+            {
+                int[] res = new int[3];
+                for (int i = 0; i < 3; i++)
+                {
+                    res[i] = (Matrix[0, i] + Matrix[1, i])/2;
+                }
+
+                return res;
+            }
 
             public void ChangeEnd(int row, string CoordString)
             {
@@ -97,7 +124,7 @@ namespace CG_Paint
                 Matrix[row, 2] = NewZ;
             }
 
-            public string Equation()
+            public string WriteEquation()
             {
                 int A, B, C;
                 A = Matrix[1, 0] - Matrix[0, 0];

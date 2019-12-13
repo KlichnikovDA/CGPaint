@@ -133,9 +133,9 @@
             this.mi_MenuImage.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.MenuItemCreate,
             this.MenuItemDelete,
-            this.построениеОтрезковToolStripMenuItem,
             this.MenuItemGroup,
-            this.MenuItemDegroup});
+            this.MenuItemDegroup,
+            this.построениеОтрезковToolStripMenuItem});
             this.mi_MenuImage.Name = "mi_MenuImage";
             this.mi_MenuImage.Size = new System.Drawing.Size(95, 20);
             this.mi_MenuImage.Text = "Изображение";
@@ -145,7 +145,7 @@
             this.MenuItemCreate.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.MenuItemLine});
             this.MenuItemCreate.Name = "MenuItemCreate";
-            this.MenuItemCreate.Size = new System.Drawing.Size(202, 22);
+            this.MenuItemCreate.Size = new System.Drawing.Size(244, 22);
             this.MenuItemCreate.Text = "Создать";
             // 
             // MenuItemLine
@@ -160,7 +160,7 @@
             // 
             this.MenuItemDelete.Name = "MenuItemDelete";
             this.MenuItemDelete.ShortcutKeys = System.Windows.Forms.Keys.Delete;
-            this.MenuItemDelete.Size = new System.Drawing.Size(202, 22);
+            this.MenuItemDelete.Size = new System.Drawing.Size(244, 22);
             this.MenuItemDelete.Text = "Удалить";
             this.MenuItemDelete.Click += new System.EventHandler(this.MenuItemDelete_Click);
             // 
@@ -171,38 +171,44 @@
             this.MenuItemAltitude,
             this.MenuItemBisection});
             this.построениеОтрезковToolStripMenuItem.Name = "построениеОтрезковToolStripMenuItem";
-            this.построениеОтрезковToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.построениеОтрезковToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
             this.построениеОтрезковToolStripMenuItem.Text = "Построение отрезков";
             // 
             // MenuItemMedian
             // 
             this.MenuItemMedian.Name = "MenuItemMedian";
+            this.MenuItemMedian.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.M)));
             this.MenuItemMedian.Size = new System.Drawing.Size(180, 22);
             this.MenuItemMedian.Text = "Медиана";
+            this.MenuItemMedian.Click += new System.EventHandler(this.MenuItemMedian_Click);
             // 
             // MenuItemAltitude
             // 
             this.MenuItemAltitude.Name = "MenuItemAltitude";
+            this.MenuItemAltitude.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.A)));
             this.MenuItemAltitude.Size = new System.Drawing.Size(180, 22);
             this.MenuItemAltitude.Text = "Высота";
             // 
             // MenuItemBisection
             // 
             this.MenuItemBisection.Name = "MenuItemBisection";
+            this.MenuItemBisection.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.B)));
             this.MenuItemBisection.Size = new System.Drawing.Size(180, 22);
             this.MenuItemBisection.Text = "Биссектриса";
             // 
             // MenuItemGroup
             // 
             this.MenuItemGroup.Name = "MenuItemGroup";
-            this.MenuItemGroup.Size = new System.Drawing.Size(202, 22);
+            this.MenuItemGroup.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.G)));
+            this.MenuItemGroup.Size = new System.Drawing.Size(244, 22);
             this.MenuItemGroup.Text = "Сгруппировать";
             this.MenuItemGroup.Click += new System.EventHandler(this.MenuItemGroup_Click);
             // 
             // MenuItemDegroup
             // 
             this.MenuItemDegroup.Name = "MenuItemDegroup";
-            this.MenuItemDegroup.Size = new System.Drawing.Size(202, 22);
+            this.MenuItemDegroup.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
+            this.MenuItemDegroup.Size = new System.Drawing.Size(244, 22);
             this.MenuItemDegroup.Text = "Отменить группировку";
             this.MenuItemDegroup.Click += new System.EventHandler(this.MenuItemDegroup_Click);
             // 

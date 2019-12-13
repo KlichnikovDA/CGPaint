@@ -103,15 +103,7 @@ namespace CG_Paint
         // Создание новой линии
         private void MenuItemLine_Click(object sender, EventArgs e)
         {
-            Random rng = new Random();
-            int x1, x2, y1, y2;
-            // Задание координат
-            x1 = rng.Next(0, pbDraw.Width);
-            x2 = rng.Next(0, pbDraw.Width);
-            y1 = rng.Next(0, pbDraw.Height);
-            y2 = rng.Next(0, pbDraw.Height);
-
-            UsedPrimitives.Add(new MyLine(new Point(x1, y1), new Point(x2, y2), "Объект "+ (UsedPrimitives.Count+1)));
+            UsedPrimitives.Add(new MyLine(pbDraw.Width, pbDraw.Height, "Объект "+ (UsedPrimitives.Count+1)));
             lbPrimitives.Items.Add(UsedPrimitives[UsedPrimitives.Count-1].Name);
             pbDraw.Invalidate();
         }
@@ -174,7 +166,7 @@ namespace CG_Paint
                 {
                     tbXCoord.Text = (CurrentPrimitives[0] as MyLine).GetEnd(0);
                     tbYCoord.Text = (CurrentPrimitives[0] as MyLine).GetEnd(1);
-                    tbEquation.Text = (CurrentPrimitives[0] as MyLine).Equation();
+                    tbEquation.Text = (CurrentPrimitives[0] as MyLine).WriteEquation();
                 }
             }
         }
@@ -248,7 +240,7 @@ namespace CG_Paint
                 tbYCoord.Text = (CurrentPrimitives[0] as MyLine).GetEnd(1);
                 tbYCoord.Enabled = true;
                 btApplyTwo.Enabled = true;
-                tbEquation.Text = (CurrentPrimitives[0] as MyLine).Equation();
+                tbEquation.Text = (CurrentPrimitives[0] as MyLine).WriteEquation();
             }
             else
             {
@@ -344,7 +336,7 @@ namespace CG_Paint
             try
             {
                 (CurrentPrimitives[0] as MyLine).ChangeEnd(0, tbXCoord.Text);
-                tbEquation.Text = (CurrentPrimitives[0] as MyLine).Equation();
+                tbEquation.Text = (CurrentPrimitives[0] as MyLine).WriteEquation();
                 pbDraw.Invalidate();
             }
             catch
@@ -358,7 +350,7 @@ namespace CG_Paint
             try
             {
                 (CurrentPrimitives[0] as MyLine).ChangeEnd(1, tbYCoord.Text);
-                tbEquation.Text = (CurrentPrimitives[0] as MyLine).Equation();
+                tbEquation.Text = (CurrentPrimitives[0] as MyLine).WriteEquation();
                 pbDraw.Invalidate();
             }
             catch
@@ -366,5 +358,34 @@ namespace CG_Paint
                 tbYCoord.Text = (CurrentPrimitives[0] as MyLine).GetEnd(1);
             }
         }
+
+        #region Сложные операции
+        // Переход в режим построения медианы
+        private void MenuItemMedian_Click(object sender, EventArgs e)
+        {
+            // Переподписываем делегат на наш новый обработчик
+            this.pbDraw.MouseUp -= this.pbDraw_MouseUp;
+            this.pbDraw.MouseUp += new MouseEventHandler(pbDraw_MouseUpMedian);
+        }
+
+        // Установка точки из которой будут строиться медианы
+        // Построение медиан из точки ко всем выделенным объектам
+        private void pbDraw_MouseUpMedian(object sender, MouseEventArgs e)
+        {
+            foreach (Primitive Prim in CurrentPrimitives)
+            {
+                int[] vector = (Prim as MyLine).GetMiddle();
+
+                UsedPrimitives.Add(new MyLine(new Point(e.X, e.Y), new Point(vector[0], vector[1]), 
+                    vector[2], "Объект " + (UsedPrimitives.Count + 1)));
+                lbPrimitives.Items.Add(UsedPrimitives[UsedPrimitives.Count - 1].Name);
+                pbDraw.Invalidate();
+            }
+
+            // Возврат к стандартному обработчику клика мышью
+            this.pbDraw.MouseUp -= this.pbDraw_MouseUpMedian;
+            this.pbDraw.MouseUp += pbDraw_MouseUp;
+        }
+        #endregion Сложные операции
     }
 }
