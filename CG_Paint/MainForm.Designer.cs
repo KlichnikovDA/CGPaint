@@ -56,12 +56,16 @@
             this.lblEquation = new System.Windows.Forms.Label();
             this.lblMouse = new System.Windows.Forms.Label();
             this.cbShowAxis = new System.Windows.Forms.CheckBox();
-            this.btApplyOne = new System.Windows.Forms.Button();
-            this.btApplyTwo = new System.Windows.Forms.Button();
             this.lbGroups = new System.Windows.Forms.ListBox();
             this.lblGroups = new System.Windows.Forms.Label();
+            this.bt_SecPos = new System.Windows.Forms.Button();
+            this.bt_FirPos = new System.Windows.Forms.Button();
+            this.trb_Morfing = new System.Windows.Forms.TrackBar();
+            this.tb_Morfing = new System.Windows.Forms.TextBox();
+            this.lblMorfing = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbDraw)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trb_Morfing)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -239,7 +243,7 @@
             // labelx
             // 
             this.labelx.AutoSize = true;
-            this.labelx.Location = new System.Drawing.Point(917, 37);
+            this.labelx.Location = new System.Drawing.Point(999, 35);
             this.labelx.Name = "labelx";
             this.labelx.Size = new System.Drawing.Size(146, 13);
             this.labelx.TabIndex = 4;
@@ -248,23 +252,25 @@
             // tbXCoord
             // 
             this.tbXCoord.Enabled = false;
-            this.tbXCoord.Location = new System.Drawing.Point(1069, 34);
+            this.tbXCoord.Location = new System.Drawing.Point(1151, 32);
             this.tbXCoord.Name = "tbXCoord";
             this.tbXCoord.Size = new System.Drawing.Size(100, 20);
             this.tbXCoord.TabIndex = 5;
+            this.tbXCoord.Leave += new System.EventHandler(this.tbXCoord_Leave);
             // 
             // tbYCoord
             // 
             this.tbYCoord.Enabled = false;
-            this.tbYCoord.Location = new System.Drawing.Point(1069, 60);
+            this.tbYCoord.Location = new System.Drawing.Point(1151, 58);
             this.tbYCoord.Name = "tbYCoord";
             this.tbYCoord.Size = new System.Drawing.Size(100, 20);
             this.tbYCoord.TabIndex = 7;
+            this.tbYCoord.Leave += new System.EventHandler(this.tbYCoord_Leave);
             // 
             // labely
             // 
             this.labely.AutoSize = true;
-            this.labely.Location = new System.Drawing.Point(918, 57);
+            this.labely.Location = new System.Drawing.Point(1000, 55);
             this.labely.Name = "labely";
             this.labely.Size = new System.Drawing.Size(145, 13);
             this.labely.TabIndex = 6;
@@ -320,26 +326,6 @@
             this.cbShowAxis.UseVisualStyleBackColor = true;
             this.cbShowAxis.CheckedChanged += new System.EventHandler(this.cbShowAxis_CheckedChanged);
             // 
-            // btApplyOne
-            // 
-            this.btApplyOne.Location = new System.Drawing.Point(1177, 34);
-            this.btApplyOne.Name = "btApplyOne";
-            this.btApplyOne.Size = new System.Drawing.Size(75, 22);
-            this.btApplyOne.TabIndex = 13;
-            this.btApplyOne.Text = "Задать";
-            this.btApplyOne.UseVisualStyleBackColor = true;
-            this.btApplyOne.Click += new System.EventHandler(this.btApplyOne_Click);
-            // 
-            // btApplyTwo
-            // 
-            this.btApplyTwo.Location = new System.Drawing.Point(1177, 58);
-            this.btApplyTwo.Name = "btApplyTwo";
-            this.btApplyTwo.Size = new System.Drawing.Size(75, 22);
-            this.btApplyTwo.TabIndex = 14;
-            this.btApplyTwo.Text = "Задать";
-            this.btApplyTwo.UseVisualStyleBackColor = true;
-            this.btApplyTwo.Click += new System.EventHandler(this.btApplyTwo_Click);
-            // 
             // lbGroups
             // 
             this.lbGroups.FormattingEnabled = true;
@@ -359,15 +345,67 @@
             this.lblGroups.TabIndex = 15;
             this.lblGroups.Text = "Группы";
             // 
+            // bt_SecPos
+            // 
+            this.bt_SecPos.Location = new System.Drawing.Point(369, 639);
+            this.bt_SecPos.Name = "bt_SecPos";
+            this.bt_SecPos.Size = new System.Drawing.Size(75, 37);
+            this.bt_SecPos.TabIndex = 17;
+            this.bt_SecPos.Text = "Конечная позиция";
+            this.bt_SecPos.UseVisualStyleBackColor = true;
+            this.bt_SecPos.Click += new System.EventHandler(this.bt_SecPos_Click);
+            // 
+            // bt_FirPos
+            // 
+            this.bt_FirPos.Location = new System.Drawing.Point(288, 639);
+            this.bt_FirPos.Name = "bt_FirPos";
+            this.bt_FirPos.Size = new System.Drawing.Size(75, 37);
+            this.bt_FirPos.TabIndex = 18;
+            this.bt_FirPos.Text = "Начальная позиция";
+            this.bt_FirPos.UseVisualStyleBackColor = true;
+            this.bt_FirPos.Click += new System.EventHandler(this.bt_FirPos_Click);
+            // 
+            // trb_Morfing
+            // 
+            this.trb_Morfing.Enabled = false;
+            this.trb_Morfing.LargeChange = 10;
+            this.trb_Morfing.Location = new System.Drawing.Point(562, 639);
+            this.trb_Morfing.Maximum = 100;
+            this.trb_Morfing.Name = "trb_Morfing";
+            this.trb_Morfing.Size = new System.Drawing.Size(250, 45);
+            this.trb_Morfing.TabIndex = 19;
+            this.trb_Morfing.Scroll += new System.EventHandler(this.trb_Morfing_Scroll);
+            // 
+            // tb_Morfing
+            // 
+            this.tb_Morfing.Location = new System.Drawing.Point(456, 653);
+            this.tb_Morfing.Name = "tb_Morfing";
+            this.tb_Morfing.Size = new System.Drawing.Size(100, 20);
+            this.tb_Morfing.TabIndex = 20;
+            this.tb_Morfing.Text = "0";
+            this.tb_Morfing.Leave += new System.EventHandler(this.tb_Morfing_Leave);
+            // 
+            // lblMorfing
+            // 
+            this.lblMorfing.AutoSize = true;
+            this.lblMorfing.Location = new System.Drawing.Point(453, 637);
+            this.lblMorfing.Name = "lblMorfing";
+            this.lblMorfing.Size = new System.Drawing.Size(53, 13);
+            this.lblMorfing.TabIndex = 21;
+            this.lblMorfing.Text = "Морфинг";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1264, 682);
+            this.Controls.Add(this.lblMorfing);
+            this.Controls.Add(this.tb_Morfing);
+            this.Controls.Add(this.trb_Morfing);
+            this.Controls.Add(this.bt_FirPos);
+            this.Controls.Add(this.bt_SecPos);
             this.Controls.Add(this.lbGroups);
             this.Controls.Add(this.lblGroups);
-            this.Controls.Add(this.btApplyTwo);
-            this.Controls.Add(this.btApplyOne);
             this.Controls.Add(this.cbShowAxis);
             this.Controls.Add(this.lblMouse);
             this.Controls.Add(this.tbEquation);
@@ -387,6 +425,7 @@
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbDraw)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trb_Morfing)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -416,8 +455,6 @@
         private System.Windows.Forms.Label lblEquation;
         private System.Windows.Forms.Label lblMouse;
         private System.Windows.Forms.CheckBox cbShowAxis;
-        private System.Windows.Forms.Button btApplyOne;
-        private System.Windows.Forms.Button btApplyTwo;
         private System.Windows.Forms.ListBox lbGroups;
         private System.Windows.Forms.Label lblGroups;
         private System.Windows.Forms.ToolStripMenuItem построениеОтрезковToolStripMenuItem;
@@ -426,6 +463,11 @@
         private System.Windows.Forms.ToolStripMenuItem MenuItemBisection;
         private System.Windows.Forms.ToolStripMenuItem MenuItemGroup;
         private System.Windows.Forms.ToolStripMenuItem MenuItemDegroup;
+        private System.Windows.Forms.Button bt_SecPos;
+        private System.Windows.Forms.Button bt_FirPos;
+        private System.Windows.Forms.TrackBar trb_Morfing;
+        private System.Windows.Forms.TextBox tb_Morfing;
+        private System.Windows.Forms.Label lblMorfing;
     }
 }
 

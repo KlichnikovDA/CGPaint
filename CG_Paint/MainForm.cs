@@ -27,6 +27,9 @@ namespace CG_Paint
         List<Group> Groups = new List<Group>();
         // Список примитивов, над которым в данный момент производятся операции
         List<Primitive> CurrentPrimitives = new List<Primitive>();
+        Group MorfA = new Group(new List<Primitive>(), "");
+        Group MorfB = new Group(new List<Primitive>(), "");
+        Group Morfing;
 
         private void MainForm_Load(object sender, EventArgs e)
         {
@@ -236,20 +239,16 @@ namespace CG_Paint
             {
                 tbXCoord.Text = (CurrentPrimitives[0] as MyLine).GetEnd(0);
                 tbXCoord.Enabled = true;
-                btApplyOne.Enabled = true;
                 tbYCoord.Text = (CurrentPrimitives[0] as MyLine).GetEnd(1);
                 tbYCoord.Enabled = true;
-                btApplyTwo.Enabled = true;
                 tbEquation.Text = (CurrentPrimitives[0] as MyLine).WriteEquation();
             }
             else
             {
                 tbXCoord.Text = "";
                 tbXCoord.Enabled = false;
-                btApplyOne.Enabled = false;
                 tbYCoord.Text = "";
                 tbYCoord.Enabled = false;
-                btApplyTwo.Enabled = false;
                 tbEquation.Text = "";
             }
         }
@@ -308,6 +307,10 @@ namespace CG_Paint
                 }
                 CurrentPrimitives.Clear();
                 lbPrimitives.SelectedIndices.Clear();
+                if (MorfA.Primitives.Count == 0 || MorfB.Primitives.Count == 0)
+                {
+                    trb_Morfing.Enabled = false;
+                }
                 pbDraw.Invalidate();
             }
         }
@@ -326,12 +329,14 @@ namespace CG_Paint
         }
         #endregion Операции с примитивами
 
+        // Прорисовка координатных осей
         private void cbShowAxis_CheckedChanged(object sender, EventArgs e)
         {
             pbDraw.Invalidate();
         }
 
-        private void btApplyOne_Click(object sender, EventArgs e)
+        // Задание координат для первого конца отрезка
+        private void tbXCoord_Leave(object sender, EventArgs e)
         {
             try
             {
@@ -345,7 +350,8 @@ namespace CG_Paint
             }
         }
 
-        private void btApplyTwo_Click(object sender, EventArgs e)
+        // Задание координат для второго конца отрезка
+        private void tbYCoord_Leave(object sender, EventArgs e)
         {
             try
             {
@@ -513,9 +519,107 @@ namespace CG_Paint
             }
             else
             {
-                MessageBox.Show("Выбрано неподходящее количество прямых");
+                MessageBox.Show("Выбрано неподходящее количество прямых (нужно 2)");
             }
         }
+
+        // Задать начальную позицию для морфинга
+        private void bt_FirPos_Click(object sender, EventArgs e)
+        {
+            if (lbGroups.SelectedIndices.Count == 1)
+            {
+                MorfA = Groups[lbGroups.SelectedIndices[0]];
+                if (MorfB.Primitives.Count != 0)
+                {
+                    trb_Morfing.Enabled = true;
+                    trb_Morfing_Scroll(sender, e);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Выбрано неподходящее количество групп (нужно 1)");
+            }
+        }
+
+        // Задать конечную позицию для морфинга
+        private void bt_SecPos_Click(object sender, EventArgs e)
+        {
+            if (lbGroups.SelectedIndices.Count == 1)
+            {
+                MorfB = Groups[lbGroups.SelectedIndices[0]];
+                if (MorfA.Primitives.Count != 0)
+                {
+                    trb_Morfing.Enabled = true;
+                    trb_Morfing_Scroll(sender, e);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Выбрано неподходящее количество групп (нужно 1)");
+            }
+        }
+
+        // Задать значение параметра морфинга
+        private void tb_Morfing_Leave(object sender, EventArgs e)
+        {
+            try
+            {
+                trb_Morfing.Value = (int)(Double.Parse(tb_Morfing.Text) * 100);
+            }
+            catch
+            {
+                tb_Morfing.Text = (trb_Morfing.Value / trb_Morfing.Maximum * 1.0).ToString();
+            }
+        }
+
+        // Морфинг
+        private void trb_Morfing_Scroll(object sender, EventArgs e)
+        {
+            int MaxElements = Math.Max(MorfA.Primitives.Count, MorfB.Primitives.Count),
+                AElements = MorfA.Primitives.Count, BElements = MorfB.Primitives.Count;
+            // Создать группу для морфинга, если нет
+            if (Morfing == null)
+            {
+                Morfing = new Group(new List<Primitive>(), "Морфинговая группа");
+                // Заполняем группу.
+                // Если в одной из групп будем меньше, чем в другой, линии пойдут на второй круг
+                for (int i = 0; i < MaxElements; i++)
+                {
+                    // Создание новой линии
+                    MyLine MorfLine = new MyLine(
+                        new Point(MorfA.Primitives[i % AElements].Matrix[0, 0],
+                        MorfA.Primitives[i % AElements].Matrix[0, 1]),
+                        MorfA.Primitives[i % AElements].Matrix[0, 2],
+                        new Point(MorfA.Primitives[i % AElements].Matrix[1, 0],
+                        MorfA.Primitives[i % AElements].Matrix[1, 1]),
+                        MorfA.Primitives[i % AElements].Matrix[1, 2],
+                        "Линия морфинга" + (Morfing.Primitives.Count + 1));
+
+                    Morfing.Primitives.Add(MorfLine);
+                    UsedPrimitives.Add(MorfLine);
+                    lbPrimitives.Items.Add(UsedPrimitives[UsedPrimitives.Count - 1].Name);
+                }
+                Groups.Add(Morfing);
+                lbGroups.Items.Add(Morfing.Name);
+            }
+            // Осуществление морфинга
+            double t = 1.0 * trb_Morfing.Value / trb_Morfing.Maximum;
+            for(int i = 0; i < MaxElements;i++)
+            {
+                for (int j = 0; j < 2; j++)
+                {
+                    Morfing.Primitives[i].Matrix[j, 0] = (int)(MorfA.Primitives[i % AElements].Matrix[j, 0] * (1 - t) +
+                        MorfB.Primitives[i % BElements].Matrix[j, 0] * t);
+                    Morfing.Primitives[i].Matrix[j, 1] = (int)(MorfA.Primitives[i % AElements].Matrix[j, 1] * (1 - t) +
+                        MorfB.Primitives[i % BElements].Matrix[j, 1] * t);
+                    Morfing.Primitives[i].Matrix[j, 2] = (int)(MorfA.Primitives[i % AElements].Matrix[j, 2] * (1 - t) +
+                        MorfB.Primitives[i % BElements].Matrix[j, 2] * t);
+                }
+            }
+            tb_Morfing.Text = t.ToString();
+            pbDraw.Invalidate();
+        }
+
         #endregion Сложные операции
     }
 }
