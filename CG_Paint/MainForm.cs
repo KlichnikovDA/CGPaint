@@ -423,6 +423,99 @@ namespace CG_Paint
             this.pbDraw.MouseUp -= this.pbDraw_MouseUpAltitude;
             this.pbDraw.MouseUp += pbDraw_MouseUp;
         }
+
+        // Установка точки из которой будет строиться биссектриса
+        // Построение высот из точки ко всем выделенным объектам
+        private void MenuItemBisection_Click(object sender, EventArgs e)
+        {
+            if (CurrentPrimitives.Count == 2 && CurrentPrimitives[0].GetType() == typeof(MyLine) &&
+                CurrentPrimitives[1].GetType() == typeof(MyLine))
+            {
+                // Берем координаты концов линий
+                MyPoint P1 = new MyPoint(CurrentPrimitives[0].Matrix[0, 0],
+                    CurrentPrimitives[0].Matrix[0, 1], CurrentPrimitives[0].Matrix[0, 2]);
+                MyPoint P2 = new MyPoint(CurrentPrimitives[0].Matrix[1, 0],
+                    CurrentPrimitives[0].Matrix[1, 1], CurrentPrimitives[0].Matrix[1, 2]);
+                MyPoint P3 = new MyPoint(CurrentPrimitives[1].Matrix[0, 0],
+                    CurrentPrimitives[1].Matrix[0, 1], CurrentPrimitives[1].Matrix[0, 2]);
+                MyPoint P4 = new MyPoint(CurrentPrimitives[1].Matrix[1, 0],
+                    CurrentPrimitives[1].Matrix[1, 1], CurrentPrimitives[1].Matrix[1, 2]);
+
+                // Если линии образуют угол
+                if (P1 == P3 || P1 == P4 || P2 == P3 || P2 == P4)
+                {
+                    int x1 = 0, x2 = 0, x3 = 0, x4;
+                    int y1 = 0, y2 = 0, y3 = 0, y4;
+                    int z1 = 0, z2 = 0, z3 = 0, z4;
+                    if (P1 == P3)
+                    {
+                        x1 = P2.X;
+                        y1 = P2.Y;
+                        z1 = P2.Z;
+                        x2 = P4.X;
+                        y2 = P4.Y;
+                        z2 = P4.Z;
+                        x3 = P1.X;
+                        y3 = P1.Y;
+                        z3 = P1.Z;
+                    }
+                    if (P1 == P4)
+                    {
+                        x1 = P2.X;
+                        y1 = P2.Y;
+                        z1 = P2.Z;
+                        x2 = P3.X;
+                        y2 = P3.Y;
+                        z2 = P3.Z;
+                        x3 = P1.X;
+                        y3 = P1.Y;
+                        z3 = P1.Z;
+                    }
+                    if (P2 == P3)
+                    {
+                        x1 = P1.X;
+                        y1 = P1.Y;
+                        z1 = P1.Z;
+                        x2 = P4.X;
+                        y2 = P4.Y;
+                        z2 = P4.Z;
+                        x3 = P2.X;
+                        y3 = P2.Y;
+                        z3 = P2.Z;
+                    }
+                    if (P2 == P4)
+                    {
+                        x1 = P1.X;
+                        y1 = P1.Y;
+                        z1 = P1.Z;
+                        x2 = P3.X;
+                        y2 = P3.Y;
+                        z2 = P3.Z;
+                        x3 = P2.X;
+                        y3 = P2.Y;
+                        z3 = P2.Z;
+                    }
+                    double L = Math.Sqrt((x3 - x1) * (x3 - x1) + (y3 - y1) * (y3 - y1) + (z3 - z1) * (z3 - z1)) /
+                        Math.Sqrt((x3 - x2) * (x3 - x2) + (y3 - y2) * (y3 - y2) + (z3 - z2) * (z3 - z2));
+                    x4 = (int)((x1 + x2 * L) / (1 + L));
+                    y4 = (int)((y1 + y2 * L) / (1 + L));
+                    z4 = (int)((z1 + z2 * L) / (1 + L));
+
+                    UsedPrimitives.Add(new MyLine(new Point(x3, y3), z3, new Point(x4, y4), z4, 
+                        "Объект " + (UsedPrimitives.Count + 1)));
+                    lbPrimitives.Items.Add(UsedPrimitives[UsedPrimitives.Count - 1].Name);
+                    pbDraw.Invalidate();
+                }
+                else
+                {
+                    MessageBox.Show("Выбранные отрезки не образуют угол");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Выбрано неподходящее количество прямых");
+            }
+        }
         #endregion Сложные операции
     }
 }

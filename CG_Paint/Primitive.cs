@@ -25,6 +25,107 @@ namespace CG_Paint
         abstract public void Draw(Graphics g);
         abstract public void DrawFocused(Graphics g);
 
+        // Точка
+        [Serializable]
+        public class MyPoint : Primitive
+        {
+            public int X {
+                get
+                {
+                    return Matrix[0, 0];
+                }
+            }
+
+            public int Y
+            {
+                get
+                {
+                    return Matrix[0, 1];
+                }
+            }
+
+            public int Z
+            {
+                get
+                {
+                    return Matrix[0, 2];
+                }
+            }
+            public MyPoint(int x, int y, int z)
+            {
+                Matrix = new int[,] { { x, y, z, 1 }};
+                Focused = false;
+            }
+
+            override public bool Contains(Point p)
+            {
+                return Matrix[0,0] == p.X && Matrix[0,1] == p.Y;
+            }
+
+            public bool Contains(Point p, int z)
+            {
+                return Matrix[0, 0] == p.X && Matrix[0, 1] == p.Y && Matrix[0, 2] == z;
+            }
+
+            override public int ContainsResizer(Point p)
+            {
+                // Возвращаем номер строки матрицы, содержащей нужный узел или -1
+                for (int i = 0; i < Matrix.GetLength(0); i++)
+                    if (Matrix[i, 0] == p.X && Matrix[i, 1] == p.Y)
+                        return i;
+                return -1;
+            }
+
+            override public void Draw(Graphics g)
+            {
+                if (Focused)
+                    DrawFocused(g);
+                else
+                    g.DrawLine(new Pen(Color.Red, 3), Matrix[0, 0], Matrix[0, 1], Matrix[0, 0], Matrix[0, 1]);
+            }
+
+            override public void DrawFocused(Graphics g)
+            {
+                g.DrawLine(new Pen(Color.Blue, 3), Matrix[0, 0], Matrix[0, 1], Matrix[0, 0], Matrix[0, 1]);
+            }
+
+            public bool Equals(MyPoint other)
+            {
+                if (ReferenceEquals(null, other))
+                    return false;
+                if (ReferenceEquals(this, other))
+                    return true;
+                return X == other.X && Y == other.Y && Z == other.Z;
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (ReferenceEquals(null, obj))
+                    return false;
+                if (ReferenceEquals(this, obj))
+                    return true;
+                return Equals(obj as MyPoint);
+            }
+
+            public override int GetHashCode()
+            {
+                unchecked
+                {
+                    return (X * 397) ^ Y;
+                }
+            }
+
+            public static bool operator ==(MyPoint left, MyPoint right)
+            {
+                return Equals(left, right);
+            }
+
+            public static bool operator !=(MyPoint left, MyPoint right)
+            {
+                return !Equals(left, right);
+            }
+        }
+
         // Прямая линия
         [Serializable]
         public class MyLine: Primitive
@@ -32,6 +133,13 @@ namespace CG_Paint
             public MyLine(Point p1, Point p2, int z2, string n)
             {
                 Matrix = new int[,] { { p1.X, p1.Y, 0, 1 }, { p2.X, p2.Y, z2, 1 } };
+                Name = n;
+                Focused = false;
+            }
+
+            public MyLine(Point p1, int z1, Point p2, int z2, string n)
+            {
+                Matrix = new int[,] { { p1.X, p1.Y, z1, 1 }, { p2.X, p2.Y, z2, 1 } };
                 Name = n;
                 Focused = false;
             }
@@ -57,7 +165,7 @@ namespace CG_Paint
                 {
                     return (float)(Matrix[1, 1] - Matrix[0, 1]) / (Matrix[1, 0] - Matrix[0, 0]);
                 }
-                catch (DivideByZeroException e)
+                catch (DivideByZeroException)
                 {
                     return Matrix[1, 1] - Matrix[0, 1];
                 }

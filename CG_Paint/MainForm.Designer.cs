@@ -159,7 +159,7 @@
             // MenuItemDelete
             // 
             this.MenuItemDelete.Name = "MenuItemDelete";
-            this.MenuItemDelete.ShortcutKeys = System.Windows.Forms.Keys.Delete;
+            this.MenuItemDelete.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Delete)));
             this.MenuItemDelete.Size = new System.Drawing.Size(244, 22);
             this.MenuItemDelete.Text = "Удалить";
             this.MenuItemDelete.Click += new System.EventHandler(this.MenuItemDelete_Click);
@@ -212,6 +212,7 @@
             this.MenuItemBisection.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.B)));
             this.MenuItemBisection.Size = new System.Drawing.Size(180, 22);
             this.MenuItemBisection.Text = "Биссектриса";
+            this.MenuItemBisection.Click += new System.EventHandler(this.MenuItemBisection_Click);
             // 
             // pbDraw
             // 
