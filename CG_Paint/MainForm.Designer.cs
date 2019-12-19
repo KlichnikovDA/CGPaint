@@ -70,10 +70,22 @@
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.trbRotateX = new System.Windows.Forms.TrackBar();
+            this.lblRotateX = new System.Windows.Forms.Label();
+            this.tbRotateX = new System.Windows.Forms.TextBox();
+            this.lblRotateY = new System.Windows.Forms.Label();
+            this.tbRotateY = new System.Windows.Forms.TextBox();
+            this.trbRotateY = new System.Windows.Forms.TrackBar();
+            this.lblZc = new System.Windows.Forms.Label();
+            this.tbZc = new System.Windows.Forms.TextBox();
+            this.trbZc = new System.Windows.Forms.TrackBar();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbDraw)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trb_Morfing)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvOperMatrix)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trbRotateX)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trbRotateY)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trbZc)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -384,6 +396,7 @@
             // 
             // tb_Morfing
             // 
+            this.tb_Morfing.Enabled = false;
             this.tb_Morfing.Location = new System.Drawing.Point(456, 653);
             this.tb_Morfing.Name = "tb_Morfing";
             this.tb_Morfing.Size = new System.Drawing.Size(100, 20);
@@ -437,7 +450,7 @@
             this.dgvOperMatrix.Name = "dgvOperMatrix";
             this.dgvOperMatrix.RowHeadersVisible = false;
             this.dgvOperMatrix.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dgvOperMatrix.Size = new System.Drawing.Size(240, 90);
+            this.dgvOperMatrix.Size = new System.Drawing.Size(240, 91);
             this.dgvOperMatrix.TabIndex = 24;
             this.dgvOperMatrix.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvOperMatrix_CellValueChanged);
             // 
@@ -469,11 +482,107 @@
             this.Column4.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.Column4.Width = 60;
             // 
+            // trbRotateX
+            // 
+            this.trbRotateX.LargeChange = 10;
+            this.trbRotateX.Location = new System.Drawing.Point(823, 272);
+            this.trbRotateX.Maximum = 360;
+            this.trbRotateX.Name = "trbRotateX";
+            this.trbRotateX.Size = new System.Drawing.Size(240, 45);
+            this.trbRotateX.TabIndex = 25;
+            this.trbRotateX.Scroll += new System.EventHandler(this.trbRotateX_Scroll);
+            // 
+            // lblRotateX
+            // 
+            this.lblRotateX.AutoSize = true;
+            this.lblRotateX.Location = new System.Drawing.Point(823, 256);
+            this.lblRotateX.Name = "lblRotateX";
+            this.lblRotateX.Size = new System.Drawing.Size(127, 13);
+            this.lblRotateX.TabIndex = 27;
+            this.lblRotateX.Text = "Вращение вокруг оси X";
+            // 
+            // tbRotateX
+            // 
+            this.tbRotateX.Location = new System.Drawing.Point(1066, 272);
+            this.tbRotateX.Name = "tbRotateX";
+            this.tbRotateX.Size = new System.Drawing.Size(35, 20);
+            this.tbRotateX.TabIndex = 26;
+            this.tbRotateX.Text = "0";
+            this.tbRotateX.Leave += new System.EventHandler(this.tbRotateX_Leave);
+            // 
+            // lblRotateY
+            // 
+            this.lblRotateY.AutoSize = true;
+            this.lblRotateY.Location = new System.Drawing.Point(823, 316);
+            this.lblRotateY.Name = "lblRotateY";
+            this.lblRotateY.Size = new System.Drawing.Size(127, 13);
+            this.lblRotateY.TabIndex = 30;
+            this.lblRotateY.Text = "Вращение вокруг оси Y";
+            // 
+            // tbRotateY
+            // 
+            this.tbRotateY.Location = new System.Drawing.Point(1066, 332);
+            this.tbRotateY.Name = "tbRotateY";
+            this.tbRotateY.Size = new System.Drawing.Size(35, 20);
+            this.tbRotateY.TabIndex = 29;
+            this.tbRotateY.Text = "0";
+            this.tbRotateY.Leave += new System.EventHandler(this.tbRotateY_Leave);
+            // 
+            // trbRotateY
+            // 
+            this.trbRotateY.LargeChange = 10;
+            this.trbRotateY.Location = new System.Drawing.Point(823, 332);
+            this.trbRotateY.Maximum = 360;
+            this.trbRotateY.Name = "trbRotateY";
+            this.trbRotateY.Size = new System.Drawing.Size(240, 45);
+            this.trbRotateY.TabIndex = 28;
+            this.trbRotateY.Scroll += new System.EventHandler(this.trbRotateY_Scroll);
+            // 
+            // lblZc
+            // 
+            this.lblZc.AutoSize = true;
+            this.lblZc.Location = new System.Drawing.Point(823, 367);
+            this.lblZc.Name = "lblZc";
+            this.lblZc.Size = new System.Drawing.Size(128, 13);
+            this.lblZc.TabIndex = 33;
+            this.lblZc.Text = "Положение точки схода";
+            // 
+            // tbZc
+            // 
+            this.tbZc.Location = new System.Drawing.Point(1066, 383);
+            this.tbZc.Name = "tbZc";
+            this.tbZc.Size = new System.Drawing.Size(35, 20);
+            this.tbZc.TabIndex = 32;
+            this.tbZc.Text = "100";
+            this.tbZc.Leave += new System.EventHandler(this.tbZc_Leave);
+            // 
+            // trbZc
+            // 
+            this.trbZc.LargeChange = 10;
+            this.trbZc.Location = new System.Drawing.Point(823, 383);
+            this.trbZc.Maximum = 500;
+            this.trbZc.Minimum = 100;
+            this.trbZc.Name = "trbZc";
+            this.trbZc.Size = new System.Drawing.Size(240, 45);
+            this.trbZc.SmallChange = 5;
+            this.trbZc.TabIndex = 31;
+            this.trbZc.Value = 100;
+            this.trbZc.Scroll += new System.EventHandler(this.trbZc_Scroll);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1264, 682);
+            this.Controls.Add(this.lblZc);
+            this.Controls.Add(this.tbZc);
+            this.Controls.Add(this.trbZc);
+            this.Controls.Add(this.lblRotateY);
+            this.Controls.Add(this.tbRotateY);
+            this.Controls.Add(this.trbRotateY);
+            this.Controls.Add(this.lblRotateX);
+            this.Controls.Add(this.tbRotateX);
+            this.Controls.Add(this.trbRotateX);
             this.Controls.Add(this.dgvOperMatrix);
             this.Controls.Add(this.bt_AppEndTwo);
             this.Controls.Add(this.bt_AppEndOne);
@@ -505,6 +614,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbDraw)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trb_Morfing)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvOperMatrix)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trbRotateX)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trbRotateY)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trbZc)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -554,6 +666,15 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
+        private System.Windows.Forms.TrackBar trbRotateX;
+        private System.Windows.Forms.Label lblRotateX;
+        private System.Windows.Forms.TextBox tbRotateX;
+        private System.Windows.Forms.Label lblRotateY;
+        private System.Windows.Forms.TextBox tbRotateY;
+        private System.Windows.Forms.TrackBar trbRotateY;
+        private System.Windows.Forms.Label lblZc;
+        private System.Windows.Forms.TextBox tbZc;
+        private System.Windows.Forms.TrackBar trbZc;
     }
 }
 

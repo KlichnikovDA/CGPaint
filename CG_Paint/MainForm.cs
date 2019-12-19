@@ -660,5 +660,115 @@ namespace CG_Paint
             }
         }
         #endregion Сложные операции
+
+        #region 2,5D
+        // Задать угол вращения вокруг оси X
+        private void tbRotateX_Leave(object sender, EventArgs e)
+        {
+            try
+            {
+                trbRotateX.Value  = Int32.Parse(tbRotateX.Text);
+                trbRotateX_Scroll(sender, e);
+            }
+            catch
+            {
+                tbRotateX.Text = trbRotateX.Value.ToString();
+            }
+        }
+
+        // Вращение вокруг оси Х
+        private void trbRotateX_Scroll(object sender, EventArgs e)
+        {
+            // Заполнение матрицы
+            dgvOperMatrix.Rows[0].Cells[1].Value = Math.Sin(trbRotateY.Value * (Math.PI / 180.0)) *
+                Math.Sin(trbRotateX.Value * (Math.PI / 180.0));
+            dgvOperMatrix.Rows[1].Cells[1].Value = Math.Cos(trbRotateX.Value * (Math.PI / 180.0));
+            dgvOperMatrix.Rows[2].Cells[1].Value = Math.Sin(trbRotateX.Value * (Math.PI / 180.0));
+            dgvOperMatrix.Rows[0].Cells[2].Value = 0;
+            dgvOperMatrix.Rows[1].Cells[2].Value = 0;
+            dgvOperMatrix.Rows[2].Cells[2].Value = 0;
+            dgvOperMatrix.Rows[3].Cells[2].Value = 0;
+            dgvOperMatrix.Rows[0].Cells[3].Value = Math.Sin(trbRotateY.Value * (Math.PI / 180.0)) *
+                Math.Cos(trbRotateX.Value * (Math.PI / 180.0)) / trbZc.Value;
+            dgvOperMatrix.Rows[1].Cells[3].Value = -Math.Sin(trbRotateX.Value * (Math.PI / 180.0)) / trbZc.Value;
+            dgvOperMatrix.Rows[2].Cells[3].Value = -Math.Cos(trbRotateY.Value * (Math.PI / 180.0)) *
+                Math.Cos(trbRotateX.Value * (Math.PI / 180.0)) / trbZc.Value;
+
+            tbRotateX.Text = trbRotateX.Value.ToString();
+            pbDraw.Invalidate();
+        }
+
+        // Задать угол вращения вокруг оси Y
+        private void tbRotateY_Leave(object sender, EventArgs e)
+        {
+            try
+            {
+                trbRotateY.Value = Int32.Parse(tbRotateY.Text);
+                trbRotateY_Scroll(sender, e);
+            }
+            catch
+            {
+                tbRotateY.Text = trbRotateY.Value.ToString();
+            }
+        }
+
+        // Вращение вокруг оси Х
+        private void trbRotateY_Scroll(object sender, EventArgs e)
+        {
+            // Заполнение матрицы
+            dgvOperMatrix.Rows[0].Cells[1].Value = Math.Sin(trbRotateY.Value * (Math.PI / 180.0)) *
+                Math.Sin(trbRotateX.Value * (Math.PI / 180.0));
+            dgvOperMatrix.Rows[1].Cells[1].Value = Math.Cos(trbRotateX.Value * (Math.PI / 180.0));
+            dgvOperMatrix.Rows[2].Cells[1].Value = Math.Sin(trbRotateX.Value * (Math.PI / 180.0));
+            dgvOperMatrix.Rows[0].Cells[2].Value = 0;
+            dgvOperMatrix.Rows[1].Cells[2].Value = 0;
+            dgvOperMatrix.Rows[2].Cells[2].Value = 0;
+            dgvOperMatrix.Rows[3].Cells[2].Value = 0;
+            dgvOperMatrix.Rows[0].Cells[3].Value = Math.Sin(trbRotateY.Value * (Math.PI / 180.0)) *
+                Math.Cos(trbRotateX.Value * (Math.PI / 180.0)) / trbZc.Value;
+            dgvOperMatrix.Rows[1].Cells[3].Value = -Math.Sin(trbRotateX.Value * (Math.PI / 180.0)) / trbZc.Value;
+            dgvOperMatrix.Rows[2].Cells[3].Value = -Math.Cos(trbRotateY.Value * (Math.PI / 180.0)) *
+                Math.Cos(trbRotateX.Value * (Math.PI / 180.0)) / trbZc.Value;
+
+            tbRotateY.Text = trbRotateY.Value.ToString();
+            pbDraw.Invalidate();
+        }
+
+        // Задать расстояние до точки схода
+        private void tbZc_Leave(object sender, EventArgs e)
+        {
+            try
+            {
+                trbZc.Value = Int32.Parse(tbZc.Text);
+                trbZc_Scroll(sender, e);
+            }
+            catch
+            {
+                tbZc.Text = trbZc.Value.ToString();
+            }
+        }        
+
+        // Проекция с заданного расстояния
+        private void trbZc_Scroll(object sender, EventArgs e)
+        {
+            // Заполнение матрицы
+            dgvOperMatrix.Rows[0].Cells[1].Value = Math.Sin(trbRotateY.Value * (Math.PI / 180.0)) *
+                Math.Sin(trbRotateX.Value * (Math.PI / 180.0));
+            dgvOperMatrix.Rows[1].Cells[1].Value = Math.Cos(trbRotateX.Value * (Math.PI / 180.0));
+            dgvOperMatrix.Rows[2].Cells[1].Value = Math.Sin(trbRotateX.Value * (Math.PI / 180.0));
+            dgvOperMatrix.Rows[0].Cells[2].Value = 0;
+            dgvOperMatrix.Rows[1].Cells[2].Value = 0;
+            dgvOperMatrix.Rows[2].Cells[2].Value = 0;
+            dgvOperMatrix.Rows[3].Cells[2].Value = 0;
+            dgvOperMatrix.Rows[0].Cells[3].Value = Math.Sin(trbRotateY.Value * (Math.PI / 180.0)) *
+                Math.Cos(trbRotateX.Value * (Math.PI / 180.0)) / trbZc.Value;
+            dgvOperMatrix.Rows[1].Cells[3].Value = -Math.Sin(trbRotateX.Value * (Math.PI / 180.0)) / trbZc.Value;
+            dgvOperMatrix.Rows[2].Cells[3].Value = -Math.Cos(trbRotateY.Value * (Math.PI / 180.0)) *
+                Math.Cos(trbRotateX.Value * (Math.PI / 180.0)) / trbZc.Value;
+
+            tbZc.Text = trbZc.Value.ToString();
+            pbDraw.Invalidate();
+        }
+        #endregion 2,5D
     }
 }
