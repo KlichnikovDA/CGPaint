@@ -50,6 +50,37 @@ namespace CG_Paint
             return C;
         }
 
+        public static double[,] MatrixMultiply(int[,] A, double[,] B)
+        {
+            double[,] C = new double[A.GetLength(0), B.GetLength(1)];
+            // Проход по строкам первой матрицы
+            for (int i = 0; i < A.GetLength(0); i++)
+            {
+                // Проход по столбцам второй матрицы
+                for (int j = 0; j < B.GetLength(1); j++)
+                    // Проход по столбцам первой и строкам второй матриц
+                    for (int k = 0; k < A.GetLength(1); k++)
+                    {
+                        C[i, j] += A[i, k] * B[k, j];
+                    }
+            }
+            return C;
+        }
+
+        // Операция нормализации
+        public static int[,] MatrixNormalise(double[,] A)
+        {
+            int[,] C = new int[A.GetLength(0), A.GetLength(1)];
+            // Проход по строкам матрицы
+            for (int i = 0; i < A.GetLength(0); i++)
+            {
+                // Проход по столбцам матрицы
+                for (int j = 0; j < A.GetLength(1); j++)
+                    C[i, j] += (int)(A[i, j] / A[i, 3]);
+            }
+            return C;
+        }
+
         // Операция умножения вектора на матрицу
         static int[] MatrixMultiply(int[] A, int[,] B)
         {

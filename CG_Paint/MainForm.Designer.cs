@@ -65,9 +65,15 @@
             this.lblMorfing = new System.Windows.Forms.Label();
             this.bt_AppEndOne = new System.Windows.Forms.Button();
             this.bt_AppEndTwo = new System.Windows.Forms.Button();
+            this.dgvOperMatrix = new System.Windows.Forms.DataGridView();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbDraw)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trb_Morfing)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvOperMatrix)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -414,11 +420,61 @@
             this.bt_AppEndTwo.UseVisualStyleBackColor = true;
             this.bt_AppEndTwo.Click += new System.EventHandler(this.bt_AppEndTwo_Click);
             // 
+            // dgvOperMatrix
+            // 
+            this.dgvOperMatrix.AllowUserToAddRows = false;
+            this.dgvOperMatrix.AllowUserToDeleteRows = false;
+            this.dgvOperMatrix.AllowUserToResizeColumns = false;
+            this.dgvOperMatrix.AllowUserToResizeRows = false;
+            this.dgvOperMatrix.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvOperMatrix.ColumnHeadersVisible = false;
+            this.dgvOperMatrix.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Column1,
+            this.Column2,
+            this.Column3,
+            this.Column4});
+            this.dgvOperMatrix.Location = new System.Drawing.Point(818, 162);
+            this.dgvOperMatrix.Name = "dgvOperMatrix";
+            this.dgvOperMatrix.RowHeadersVisible = false;
+            this.dgvOperMatrix.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dgvOperMatrix.Size = new System.Drawing.Size(240, 90);
+            this.dgvOperMatrix.TabIndex = 24;
+            this.dgvOperMatrix.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvOperMatrix_CellValueChanged);
+            // 
+            // Column1
+            // 
+            this.Column1.HeaderText = "X";
+            this.Column1.Name = "Column1";
+            this.Column1.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.Column1.Width = 60;
+            // 
+            // Column2
+            // 
+            this.Column2.HeaderText = "Y";
+            this.Column2.Name = "Column2";
+            this.Column2.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.Column2.Width = 60;
+            // 
+            // Column3
+            // 
+            this.Column3.HeaderText = "Z";
+            this.Column3.Name = "Column3";
+            this.Column3.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.Column3.Width = 60;
+            // 
+            // Column4
+            // 
+            this.Column4.HeaderText = "OK";
+            this.Column4.Name = "Column4";
+            this.Column4.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.Column4.Width = 60;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1264, 682);
+            this.Controls.Add(this.dgvOperMatrix);
             this.Controls.Add(this.bt_AppEndTwo);
             this.Controls.Add(this.bt_AppEndOne);
             this.Controls.Add(this.lblMorfing);
@@ -448,6 +504,7 @@
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbDraw)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trb_Morfing)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvOperMatrix)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -492,6 +549,11 @@
         private System.Windows.Forms.Label lblMorfing;
         private System.Windows.Forms.Button bt_AppEndOne;
         private System.Windows.Forms.Button bt_AppEndTwo;
+        private System.Windows.Forms.DataGridView dgvOperMatrix;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
     }
 }
 

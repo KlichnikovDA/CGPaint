@@ -12,6 +12,7 @@ namespace CG_Paint
     {
         // Матрица, кодирующая точки примитива
         public int[,] Matrix;
+        int[,] VisibleMatrix;
 
         public bool Focused { get; set; }
         public string Name { get; set; }
@@ -22,8 +23,8 @@ namespace CG_Paint
         abstract public int ContainsResizer(Point p);
 
         // Метод отрисовки данного примитива
-        abstract public void Draw(Graphics g);
-        abstract public void DrawFocused(Graphics g);
+        abstract public void Draw(Graphics g, double[,] OperMatrix);
+        abstract public void DrawFocused(Graphics g, double[,] OperMatrix);
 
         // Точка
         [Serializable]
@@ -76,15 +77,15 @@ namespace CG_Paint
                 return -1;
             }
 
-            override public void Draw(Graphics g)
+            override public void Draw(Graphics g, double[,] OperMatrix)
             {
                 if (Focused)
-                    DrawFocused(g);
+                    DrawFocused(g, OperMatrix);
                 else
                     g.DrawLine(new Pen(Color.Red, 3), Matrix[0, 0], Matrix[0, 1], Matrix[0, 0], Matrix[0, 1]);
             }
 
-            override public void DrawFocused(Graphics g)
+            override public void DrawFocused(Graphics g, double[,] OperMatrix)
             {
                 g.DrawLine(new Pen(Color.Blue, 3), Matrix[0, 0], Matrix[0, 1], Matrix[0, 0], Matrix[0, 1]);
             }
@@ -130,31 +131,37 @@ namespace CG_Paint
         [Serializable]
         public class MyLine: Primitive
         {
-            public MyLine(Point p1, Point p2, int z2, string n)
+            public MyLine(Point p1, Point p2, int z2, string n, double[,] OperMatrix)
             {
                 Matrix = new int[,] { { p1.X, p1.Y, 0, 1 }, { p2.X, p2.Y, z2, 1 } };
+                VisibleMatrix = AffineTransformation.MatrixNormalise(
+                        AffineTransformation.MatrixMultiply(Matrix, OperMatrix));
                 Name = n;
                 Focused = false;
             }
 
-            public MyLine(Point p1, int z1, Point p2, int z2, string n)
+            public MyLine(Point p1, int z1, Point p2, int z2, string n, double[,] OperMatrix)
             {
                 Matrix = new int[,] { { p1.X, p1.Y, z1, 1 }, { p2.X, p2.Y, z2, 1 } };
+                VisibleMatrix = AffineTransformation.MatrixNormalise(
+                        AffineTransformation.MatrixMultiply(Matrix, OperMatrix));
                 Name = n;
                 Focused = false;
             }
 
-            public MyLine(int x, int y, string n)
+            public MyLine(int x, int y, string n, double[,] OperMatrix)
             {
                 Random rng = new Random();
                 int x1, x2, y1, y2;
                 // Задание координат
-                x1 = rng.Next(0, x);
-                x2 = rng.Next(0, x);
-                y1 = rng.Next(0, y);
-                y2 = rng.Next(0, y);
+                x1 = rng.Next(-x, x);
+                x2 = rng.Next(-x, x);
+                y1 = rng.Next(-y, y);
+                y2 = rng.Next(-y, y);
 
                 Matrix = new int[,] { { x1, y1, 0, 1 }, { x2, y2, 0, 1 } };
+                VisibleMatrix = AffineTransformation.MatrixNormalise(
+                        AffineTransformation.MatrixMultiply(Matrix, OperMatrix));
                 Name = n;
                 Focused = false;
             }
@@ -163,7 +170,7 @@ namespace CG_Paint
             {
                 try
                 {
-                    return (float)(Matrix[1, 1] - Matrix[0, 1]) / (Matrix[1, 0] - Matrix[0, 0]);
+                    return (float)(VisibleMatrix[1, 1] - VisibleMatrix[0, 1]) / (VisibleMatrix[1, 0] - VisibleMatrix[0, 0]);
                 }
                 catch (DivideByZeroException)
                 {
@@ -172,39 +179,47 @@ namespace CG_Paint
             }
 
             override public bool Contains(Point p)
-            {
-                float temp = Slope() * p.X + (Matrix[0, 1] - Slope() * Matrix[0, 0]);
-                return (temp >= (p.Y - 5) && temp <= (p.Y + 5)) || (Focused && ContainsResizer(p) != -1);
+            {;
+                float temp = Slope() * (p.X - 400) + (VisibleMatrix[0, 1] - Slope() * VisibleMatrix[0, 0]);
+                return (temp >= (300 - p.Y - 5) && temp <= (300 - p.Y + 5)) || (Focused && ContainsResizer(p) != -1);
             }
 
             override public int ContainsResizer(Point p)
             {
                 // Возвращаем номер строки матрицы, содержащей нужный узел или -1
                 for (int i = 0; i < Matrix.GetLength(0); i++)
-                    if (Matrix[i, 0] >= p.X - 10 && Matrix[i, 0] <= p.X + 10 && 
-                        Matrix[i, 1] >= p.Y - 10 && Matrix[i, 1] <= p.Y + 10)
+                    if (VisibleMatrix[i, 0] >= (p.X - 400) - 10 && VisibleMatrix[i, 0] <= (p.X - 400) + 10 &&
+                        VisibleMatrix[i, 1] >= (300 - p.Y - 5) - 10 && VisibleMatrix[i, 1] <= (300 - p.Y - 5) + 10)
                         return i;
                 return -1;
             }
 
-            override public void Draw(Graphics g)
+            override public void Draw(Graphics g, double[,] OperMatrix)
             {
                 if (Focused)
-                    DrawFocused(g);
+                    DrawFocused(g, OperMatrix);
                 else
-                    g.DrawLine(new Pen(Color.Red, 3), Matrix[0, 0], Matrix[0, 1], Matrix[1, 0], Matrix[1, 1]);
+                {
+                    VisibleMatrix = AffineTransformation.MatrixNormalise(
+                        AffineTransformation.MatrixMultiply(Matrix, OperMatrix));
+                    g.DrawLine(new Pen(Color.Red, 3), VisibleMatrix[0, 0], VisibleMatrix[0, 1],
+                        VisibleMatrix[1, 0], VisibleMatrix[1, 1]);
+                }
             }
 
-            override public void DrawFocused(Graphics g)
+            override public void DrawFocused(Graphics g, double[,] OperMatrix)
             {
-                g.DrawLine(new Pen(Color.Blue, 3), Matrix[0, 0], Matrix[0, 1], Matrix[1, 0], Matrix[1, 1]);
-                g.DrawEllipse(new Pen(Color.Blue, 3), Matrix[0, 0] - 5, Matrix[0, 1] - 5, 10, 10);
-                g.DrawEllipse(new Pen(Color.Blue, 3), Matrix[1, 0] - 5, Matrix[1, 1] - 5, 10, 10);
+                VisibleMatrix = AffineTransformation.MatrixNormalise(
+                        AffineTransformation.MatrixMultiply(Matrix, OperMatrix));
+                g.DrawLine(new Pen(Color.Blue, 3), VisibleMatrix[0, 0], VisibleMatrix[0, 1],
+                    VisibleMatrix[1, 0], VisibleMatrix[1, 1]);
+                g.DrawEllipse(new Pen(Color.Blue, 3), VisibleMatrix[0, 0] - 5, VisibleMatrix[0, 1] - 5, 10, 10);
+                g.DrawEllipse(new Pen(Color.Blue, 3), VisibleMatrix[1, 0] - 5, VisibleMatrix[1, 1] - 5, 10, 10);
             }
 
             public string GetEnd(int row)
             {
-                return Matrix[row, 0].ToString() + ";" + (600 - Matrix[row, 1]).ToString() + ";" + Matrix[row, 2].ToString();
+                return Matrix[row, 0].ToString() + ";" + Matrix[row, 1].ToString() + ";" + Matrix[row, 2].ToString();
             }
                 
             // Вычислить координаты середины отрезка
@@ -224,7 +239,7 @@ namespace CG_Paint
                 string[] NewCoord = CoordString.Split(';');
                 int NewX, NewY, NewZ;
                 NewX = Int32.Parse(NewCoord[0]);
-                NewY = 600 - Int32.Parse(NewCoord[1]);
+                NewY = Int32.Parse(NewCoord[1]);
                 NewZ = Int32.Parse(NewCoord[2]);
 
                 Matrix[row, 0] = NewX;

@@ -27,13 +27,18 @@ namespace CG_Paint
         List<Group> Groups = new List<Group>();
         // Список примитивов, над которым в данный момент производятся операции
         List<Primitive> CurrentPrimitives = new List<Primitive>();
+        // Группы морфинга
         Group MorfA = new Group(new List<Primitive>(), "");
         Group MorfB = new Group(new List<Primitive>(), "");
         Group Morfing = new Group(new List<Primitive>(), "Морфинговая группа");
+        // Матрица преобразований
+        double[,] OperMatrix = new double[4, 4];
 
         private void MainForm_Load(object sender, EventArgs e)
         {
             MenuItemNew_Click(sender, e);
+            //var g = pbDraw.CreateGraphics();
+            //g.TranslateTransform((float)pbDraw.Width / 2, (float)pbDraw.Height / 2);
         }
 
         #region Операции с файлами
@@ -44,7 +49,19 @@ namespace CG_Paint
             lbPrimitives.Items.Clear();
             UsedPrimitives.Clear();
             Groups.Clear();
+            lbGroups.Items.Clear();
             CurrentPrimitives.Clear();
+            MorfA = new Group(new List<Primitive>(), "");
+            MorfB = new Group(new List<Primitive>(), "");
+            Morfing = new Group(new List<Primitive>(), "Морфинговая группа");
+            dgvOperMatrix.Rows.Clear();
+            dgvOperMatrix.Rows.Add(4);
+            for (int i = 0; i < 4; i++)
+                for (int j = 0; j < 4; j++)
+                    if (i != j)
+                        dgvOperMatrix.Rows[i].Cells[j].Value = 0;
+                    else
+                        dgvOperMatrix.Rows[i].Cells[j].Value = 1;
             pbDraw.Invalidate();
         }
 
@@ -106,7 +123,7 @@ namespace CG_Paint
         // Создание новой линии
         private void MenuItemLine_Click(object sender, EventArgs e)
         {
-            UsedPrimitives.Add(new MyLine(pbDraw.Width, pbDraw.Height, "Объект "+ (UsedPrimitives.Count+1)));
+            UsedPrimitives.Add(new MyLine(pbDraw.Width / 2, pbDraw.Height / 2, "Объект " + (UsedPrimitives.Count + 1), OperMatrix));
             lbPrimitives.Items.Add(UsedPrimitives[UsedPrimitives.Count-1].Name);
             pbDraw.Invalidate();
         }
@@ -141,7 +158,7 @@ namespace CG_Paint
         // Обработка движения мыши
         private void pbDraw_MouseMove(object sender, MouseEventArgs e)
         {
-            lblMouse.Text = e.X.ToString() + ";" + (600 - e.Y).ToString();
+            lblMouse.Text = (e.X - 400).ToString() + ";" + (300 - e.Y).ToString();
             if (dragging && StartPoint != null)
             {
                 int n, m, k;
@@ -157,11 +174,11 @@ namespace CG_Paint
                 }
                 while (p == -1 && ++i < CurrentPrimitives.Count);
                 if (p != -1)
-                    CurrentPrimitives[i].Matrix = Transfer(CurrentPrimitives[i].Matrix, m, n, k, p);
+                    CurrentPrimitives[i].Matrix = Transfer(CurrentPrimitives[i].Matrix, m, -n, k, p);
                 // Иначе двигаем всю фигуру целиком
                 else
                     for (i = 0; i < CurrentPrimitives.Count; i++)
-                        CurrentPrimitives[i].Matrix = Transfer(CurrentPrimitives[i].Matrix, m, n, k);
+                        CurrentPrimitives[i].Matrix = Transfer(CurrentPrimitives[i].Matrix, m, -n, k);
                 pbDraw.Invalidate();
                 StartPoint.X = e.X;
                 StartPoint.Y = e.Y;
@@ -210,13 +227,15 @@ namespace CG_Paint
         // Отрисовка примитивов
         private void pbDraw_Paint(object sender, PaintEventArgs e)
         {
+            e.Graphics.TranslateTransform((float)pbDraw.Width / 2, (float)pbDraw.Height / 2);
             if (cbShowAxis.Checked)
                 Axis.DrawAxis(e.Graphics);
+            e.Graphics.ScaleTransform(1, -1);
             if (UsedPrimitives.Count > 0)
             {
                 foreach (var Prim in UsedPrimitives)
                 {
-                    Prim.Draw(e.Graphics);
+                    Prim.Draw(e.Graphics, OperMatrix);
                 }
             }
         }
@@ -385,7 +404,7 @@ namespace CG_Paint
                 int[] vector = (Prim as MyLine).GetMiddle();
 
                 UsedPrimitives.Add(new MyLine(new Point(e.X, e.Y), new Point(vector[0], vector[1]), 
-                    vector[2], "Объект " + (UsedPrimitives.Count + 1)));
+                    vector[2], "Объект " + (UsedPrimitives.Count + 1), OperMatrix));
                 lbPrimitives.Items.Add(UsedPrimitives[UsedPrimitives.Count - 1].Name);
                 pbDraw.Invalidate();
             }
@@ -422,7 +441,7 @@ namespace CG_Paint
                 z3 = (int)(Prim.Matrix[0, 2] + C * L);
 
                 UsedPrimitives.Add(new MyLine(new Point(e.X, e.Y), new Point(x3, y3), z3, 
-                    "Объект " + (UsedPrimitives.Count + 1)));
+                    "Объект " + (UsedPrimitives.Count + 1), OperMatrix));
                 lbPrimitives.Items.Add(UsedPrimitives[UsedPrimitives.Count - 1].Name);
                 pbDraw.Invalidate();
             }
@@ -510,7 +529,7 @@ namespace CG_Paint
                     z4 = (int)((z1 + z2 * L) / (1 + L));
 
                     UsedPrimitives.Add(new MyLine(new Point(x3, y3), z3, new Point(x4, y4), z4, 
-                        "Объект " + (UsedPrimitives.Count + 1)));
+                        "Объект " + (UsedPrimitives.Count + 1), OperMatrix));
                     lbPrimitives.Items.Add(UsedPrimitives[UsedPrimitives.Count - 1].Name);
                     pbDraw.Invalidate();
                 }
@@ -597,7 +616,7 @@ namespace CG_Paint
                         new Point(MorfA.Primitives[i % AElements].Matrix[1, 0],
                         MorfA.Primitives[i % AElements].Matrix[1, 1]),
                         MorfA.Primitives[i % AElements].Matrix[1, 2],
-                        "Линия морфинга" + (Morfing.Primitives.Count + 1));
+                        "Линия морфинга" + (Morfing.Primitives.Count + 1), OperMatrix);
 
                     Morfing.Primitives.Add(MorfLine);
                     UsedPrimitives.Add(MorfLine);
@@ -624,6 +643,22 @@ namespace CG_Paint
             pbDraw.Invalidate();
         }
 
+        // Изменили элемент матрицы преобразований
+        private void dgvOperMatrix_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                if (dgvOperMatrix.Rows.Count > 0)
+                {
+                    OperMatrix[e.RowIndex, e.ColumnIndex] = Convert.ToDouble(dgvOperMatrix.Rows[e.RowIndex].Cells[e.ColumnIndex].Value);
+                    pbDraw.Invalidate();
+                }
+            }
+            catch
+            {
+                dgvOperMatrix.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = OperMatrix[e.RowIndex, e.ColumnIndex];
+            }
+        }
         #endregion Сложные операции
     }
 }
