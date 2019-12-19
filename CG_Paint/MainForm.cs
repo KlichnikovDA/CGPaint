@@ -29,7 +29,7 @@ namespace CG_Paint
         List<Primitive> CurrentPrimitives = new List<Primitive>();
         Group MorfA = new Group(new List<Primitive>(), "");
         Group MorfB = new Group(new List<Primitive>(), "");
-        Group Morfing;
+        Group Morfing = new Group(new List<Primitive>(), "Морфинговая группа");
 
         private void MainForm_Load(object sender, EventArgs e)
         {
@@ -310,6 +310,8 @@ namespace CG_Paint
                 if (MorfA.Primitives.Count == 0 || MorfB.Primitives.Count == 0)
                 {
                     trb_Morfing.Enabled = false;
+                    tb_Morfing.Text = "0";
+                    tb_Morfing.Enabled = false;
                 }
                 pbDraw.Invalidate();
             }
@@ -335,8 +337,8 @@ namespace CG_Paint
             pbDraw.Invalidate();
         }
 
-        // Задание координат для первого конца отрезка
-        private void tbXCoord_Leave(object sender, EventArgs e)
+        // Задание координат первого конца отрезка
+        private void bt_AppEndOne_Click(object sender, EventArgs e)
         {
             try
             {
@@ -350,8 +352,8 @@ namespace CG_Paint
             }
         }
 
-        // Задание координат для второго конца отрезка
-        private void tbYCoord_Leave(object sender, EventArgs e)
+        // Задание координат второго конца отрезка
+        private void bt_AppEndTwo_Click(object sender, EventArgs e)
         {
             try
             {
@@ -532,6 +534,7 @@ namespace CG_Paint
                 if (MorfB.Primitives.Count != 0)
                 {
                     trb_Morfing.Enabled = true;
+                    tb_Morfing.Enabled = true;
                     trb_Morfing_Scroll(sender, e);
                 }
             }
@@ -550,6 +553,7 @@ namespace CG_Paint
                 if (MorfA.Primitives.Count != 0)
                 {
                     trb_Morfing.Enabled = true;
+                    tb_Morfing.Enabled = true;
                     trb_Morfing_Scroll(sender, e);
                 }
             }
@@ -565,6 +569,7 @@ namespace CG_Paint
             try
             {
                 trb_Morfing.Value = (int)(Double.Parse(tb_Morfing.Text) * 100);
+                trb_Morfing_Scroll(sender, e);
             }
             catch
             {
@@ -578,9 +583,8 @@ namespace CG_Paint
             int MaxElements = Math.Max(MorfA.Primitives.Count, MorfB.Primitives.Count),
                 AElements = MorfA.Primitives.Count, BElements = MorfB.Primitives.Count;
             // Создать группу для морфинга, если нет
-            if (Morfing == null)
+            if (Morfing.Primitives.Count == 0)
             {
-                Morfing = new Group(new List<Primitive>(), "Морфинговая группа");
                 // Заполняем группу.
                 // Если в одной из групп будем меньше, чем в другой, линии пойдут на второй круг
                 for (int i = 0; i < MaxElements; i++)

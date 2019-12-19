@@ -63,6 +63,8 @@
             this.trb_Morfing = new System.Windows.Forms.TrackBar();
             this.tb_Morfing = new System.Windows.Forms.TextBox();
             this.lblMorfing = new System.Windows.Forms.Label();
+            this.bt_AppEndOne = new System.Windows.Forms.Button();
+            this.bt_AppEndTwo = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbDraw)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trb_Morfing)).BeginInit();
@@ -243,7 +245,7 @@
             // labelx
             // 
             this.labelx.AutoSize = true;
-            this.labelx.Location = new System.Drawing.Point(999, 35);
+            this.labelx.Location = new System.Drawing.Point(917, 35);
             this.labelx.Name = "labelx";
             this.labelx.Size = new System.Drawing.Size(146, 13);
             this.labelx.TabIndex = 4;
@@ -252,25 +254,23 @@
             // tbXCoord
             // 
             this.tbXCoord.Enabled = false;
-            this.tbXCoord.Location = new System.Drawing.Point(1151, 32);
+            this.tbXCoord.Location = new System.Drawing.Point(1069, 32);
             this.tbXCoord.Name = "tbXCoord";
             this.tbXCoord.Size = new System.Drawing.Size(100, 20);
             this.tbXCoord.TabIndex = 5;
-            this.tbXCoord.Leave += new System.EventHandler(this.tbXCoord_Leave);
             // 
             // tbYCoord
             // 
             this.tbYCoord.Enabled = false;
-            this.tbYCoord.Location = new System.Drawing.Point(1151, 58);
+            this.tbYCoord.Location = new System.Drawing.Point(1069, 58);
             this.tbYCoord.Name = "tbYCoord";
             this.tbYCoord.Size = new System.Drawing.Size(100, 20);
             this.tbYCoord.TabIndex = 7;
-            this.tbYCoord.Leave += new System.EventHandler(this.tbYCoord_Leave);
             // 
             // labely
             // 
             this.labely.AutoSize = true;
-            this.labely.Location = new System.Drawing.Point(1000, 55);
+            this.labely.Location = new System.Drawing.Point(918, 55);
             this.labely.Name = "labely";
             this.labely.Size = new System.Drawing.Size(145, 13);
             this.labely.TabIndex = 6;
@@ -394,11 +394,33 @@
             this.lblMorfing.TabIndex = 21;
             this.lblMorfing.Text = "Морфинг";
             // 
+            // bt_AppEndOne
+            // 
+            this.bt_AppEndOne.Location = new System.Drawing.Point(1175, 24);
+            this.bt_AppEndOne.Name = "bt_AppEndOne";
+            this.bt_AppEndOne.Size = new System.Drawing.Size(77, 24);
+            this.bt_AppEndOne.TabIndex = 22;
+            this.bt_AppEndOne.Text = "Задать";
+            this.bt_AppEndOne.UseVisualStyleBackColor = true;
+            this.bt_AppEndOne.Click += new System.EventHandler(this.bt_AppEndOne_Click);
+            // 
+            // bt_AppEndTwo
+            // 
+            this.bt_AppEndTwo.Location = new System.Drawing.Point(1175, 54);
+            this.bt_AppEndTwo.Name = "bt_AppEndTwo";
+            this.bt_AppEndTwo.Size = new System.Drawing.Size(77, 24);
+            this.bt_AppEndTwo.TabIndex = 23;
+            this.bt_AppEndTwo.Text = "Задать";
+            this.bt_AppEndTwo.UseVisualStyleBackColor = true;
+            this.bt_AppEndTwo.Click += new System.EventHandler(this.bt_AppEndTwo_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1264, 682);
+            this.Controls.Add(this.bt_AppEndTwo);
+            this.Controls.Add(this.bt_AppEndOne);
             this.Controls.Add(this.lblMorfing);
             this.Controls.Add(this.tb_Morfing);
             this.Controls.Add(this.trb_Morfing);
@@ -468,6 +490,8 @@
         private System.Windows.Forms.TrackBar trb_Morfing;
         private System.Windows.Forms.TextBox tb_Morfing;
         private System.Windows.Forms.Label lblMorfing;
+        private System.Windows.Forms.Button bt_AppEndOne;
+        private System.Windows.Forms.Button bt_AppEndTwo;
     }
 }
 
